@@ -206,10 +206,54 @@ observes[(area=='A')|(area=='D')]
 observes[area == 'A'][:,[0,2]]
 
 
+# # # 花式索引：实际上就是将数组作为索引将原数组的元素提取出来
+arr10 = np.arange(1,29).reshape(7,4)
+arr10[[4,1,3,5]]                   # 按照指定顺序返回指定行
+arr10[[4,1,5]][:,[0,2,3]]          # 返回指定的行与列
+arr10[[4,1,5],[0,2,3]]             # 返回一维数组
+arr10[np.ix_([4,1,5],[0,2,3])]     # 使用比较简单的方式返回指定行以列的二维数组的话，可以使用ix_()
 
 
 
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+# 统计函数与线性代数运算
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+# # # 数组元素级别的计算：
+arr11 = 5 - np.arange(1,13).reshape(4,3)
+arr12 = np.random.randint(1,10,size = 12).reshape(4,3)
+arr11
+arr12
+
+arr11 ** 2                # 计算每个元素的评分
+np.sqrt(arr11)            # 计算每个元素的平方根
+np.exp(arr11)             # 计算每个元素的指数值
+np.log(arr12)             # 计算每个元素的自然对数值
+np.abs(arr11)             # 计算每个元素的绝对值
+
+
+# # # 相同形状数组间元素的操作：
+arr11 + arr12      # 加
+arr11 - arr12      # 减
+arr11 * arr12      # 乘
+arr11 / arr12      # 除 
+arr11 // arr12     # 整除
+arr11 % arr12      # 取余
+
+# # # 统计运算函数：
+np.sum(arr11)                              # 计算所有元素的和
+np.sum(arr11, axis = 0)                    # 对每一列求和
+np.sum(arr11, axis = 1)                    # 对每一行求和
+np.cumsum(arr11)                           # 对每一个元素求累计和（从上到下，从左到右的元素顺序）
+np.cumsum(arr11, axis = 0)                 # 计算每一列的累积和，并返回二维数组
+np.cumprod(arr11, axis = 1)                # 计算每一行的累计积，并返回二维数组
+np.min(arr11)                              # 计算所有元素的最小值
+np.max(arr11, axis = 0)                    # 计算所有元素的均值
+np.mean(arr11)                             # 计算所有元素的均值
+np.mean(arr11, axis = 1)                   # 计算每一行的均值
 np.median(arr11)                      # 计算所有元素的中位数
 np.median(arr11, axis = 0)            # 计算每一列的中位数
 np.var(arr12)                         # 计算所有元素的方差
