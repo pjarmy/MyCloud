@@ -268,6 +268,72 @@ max       29.000000
 ========================
 
 
+# count是序列中非缺失元素的个数，如何判断一个序列元素是否为缺失呢，可以用isnull函数（R中的is.na）
+
+# 缺失值的判定
+
+import numpy as np
+import pandas as pd
+
+s = pd.Series([1,2,np.nan,4,np.nan,6])
+print(s, '\n')
+print(s.isnull())
+
+=================
+0    1.0
+1    2.0
+2    NaN
+3    4.0
+4    NaN
+5    6.0
+dtype: float64
+
+0    False
+1    False
+2     True
+3    False
+4     True
+5    False
+dtype: bool
+=================
+
+
+# # 常用统计函数
+
+s.min()                # 最小值
+s.quantile(q=[0,0.25,0.5,0.75,1])       # 分位数函数
+s.median()             # 中位数
+s.mode()               # 余数
+s.mean()               # 平均值
+s.mad()                # 平均绝对误差
+s.max()                # 最大值
+s.sum()                # 和
+s.std()                # 标准差
+s.var()                # 方差
+s.skew()               # 偏度
+s.kurtosis()           # 峰度
+s.cumsum()             # 和的累计，返回序列
+s.cumprod()            # 乘积的累积，返回序列
+s.product()            # 序列元素乘积
+s.diff()               # 序列差异（微分），返回序列
+s.abs()                # 绝对值，返回序列
+s.pct_change()         # 百分比变化，返回序列
+s.corr(s2)             # 相关系数
+s.ptp()                # 极差 R中的range函数
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
