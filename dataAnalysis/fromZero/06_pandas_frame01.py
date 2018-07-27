@@ -1,4 +1,4 @@
-# pandas_DataFrame
+# pandas_DataFrame01
 
 # # # 数据框的构造
 
@@ -127,11 +127,11 @@ iris.head()
 # ==============================================================
 # A tibble: 5 x 5
   # Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-         # <dbl> <chr>       <chr>        <chr>       <chr>  
-# 1          5.1 3.5         1.4          0.2         setosa 
-# 2          4.9 3.0         1.4          0.2         setosa 
-# 3          4.7 3.2         1.3          0.2         setosa 
-# 4          4.6 3.1         1.5          0.2         setosa 
+         # <dbl> <chr>       <chr>        <chr>       <chr>
+# 1          5.1 3.5         1.4          0.2         setosa
+# 2          4.9 3.0         1.4          0.2         setosa
+# 3          4.7 3.2         1.3          0.2         setosa
+# 4          4.6 3.1         1.5          0.2         setosa
 # 5          5   3.6         1.4          0.2         setosa
 # ==============================================================
 
@@ -261,7 +261,7 @@ co2.info
 # ================================================================
 # [1] "Plant"     "Type"      "Treatment" "conc"      "uptake"
 # ----------------------------------------------------------------
-# [1] "Plant"     "Type"      "Treatment" "conc"     
+# [1] "Plant"     "Type"      "Treatment" "conc"
 # [5] "uptake"
 # ================================================================
 
@@ -269,12 +269,12 @@ co2.info
 # summary(co2)
 # # summary函数进行统计描述；
 # ================================================================
-# Plant       Type        Treatment      conc         uptake     
- # Qn1:5   Quebec:5   nonchilled:5   Min.   : 95   Min.   :16.00  
-                                   # 1st Qu.:175   1st Qu.:30.40  
-                                   # Median :250   Median :34.80  
-                                   # Mean   :274   Mean   :30.74  
-                                   # 3rd Qu.:350   3rd Qu.:35.30  
+# Plant       Type        Treatment      conc         uptake
+ # Qn1:5   Quebec:5   nonchilled:5   Min.   : 95   Min.   :16.00
+                                   # 1st Qu.:175   1st Qu.:30.40
+                                   # Median :250   Median :34.80
+                                   # Mean   :274   Mean   :30.74
+                                   # 3rd Qu.:350   3rd Qu.:35.30
                                    # Max.   :500   Max.   :37.20
 # ================================================================
 
@@ -289,26 +289,3 @@ co2.info
  # $ conc     : int  95 175 250 350 500
  # $ uptake   : num  16 30.4 34.8 37.2 35.3
 # ================================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
