@@ -64,7 +64,7 @@ pd.DataFrame({'id':[1,2,3], 'name':['Tom','Lily','Jim'], 'age':[28,27,29]}, colu
 # # 数据的读入
 
 import pandas as pd
-books = pd.read_table('F:/GitRespository/MyCloud/pandas06_books.txt', sep=',', header=None, usecols=[0,1,2], names=['book_typy','title','author'], encoding = 'GB2312')
+books = pd.read_table('F:/GitRespository/MyCloud/dataAnalysis/fromZero/data/pandas06_books.txt', sep=',', header=None, usecols=[0,1,2], names=['book_typy','title','author'], encoding = 'GB2312')
 books.tail()
 
 ==============================================================
@@ -80,7 +80,7 @@ books.tail()
 
 
 import pandas as pd
-co2 = pd.read_table('F:/GitRespository/MyCloud/pandas06_co2.csv', sep=',')
+co2 = pd.read_table('F:/GitRespository/MyCloud/dataAnalysis/fromZero/data/pandas06_co2.csv', sep=',')
 co2.head()
 
 =============================================
@@ -92,7 +92,7 @@ co2.head()
 4   Qn1  Quebec  nonchilled   500    35.3
 =============================================
 # R
-# co2 <- read.csv(file='F:/GitRespository/MyCloud/pandas06_co2.csv')
+# co2 <- read.csv(file='F:/GitRespository/MyCloud/dataAnalysis/fromZero/data/pandas06_co2.csv')
 # head(co2)
 # ==========================================
   # Plant   Type  Treatment conc uptake
@@ -107,7 +107,7 @@ co2.head()
 # # 电子表格的读取
 !pip install xlrd
 import pandas as pd
-iris = pd.read_excel('F:/GitRespository/MyCloud/pandas06_iris.xlsx')
+iris = pd.read_excel('F:/GitRespository/MyCloud/dataAnalysis/fromZero/data/pandas06_iris.xlsx')
 iris.head()
 
 =================================================================
@@ -122,7 +122,7 @@ iris.head()
 # R
 # install.packages('readxl')
 # library(readxl)
-# iris <- read_excel(path='F:/GitRespository/MyCloud/pandas06_iris.xlsx')
+# iris <- read_excel(path='F:/GitRespository/MyCloud/dataAnalysis/fromZero/data/pandas06_iris.xlsx')
 # head(iris)
 # ==============================================================
 # A tibble: 5 x 5
