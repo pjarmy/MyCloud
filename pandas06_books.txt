@@ -1,0 +1,5 @@
+excel,Excel数据处理与分析,李继兵
+excel,Excel 2002基础与应用,赵艳霞
+excel,Word 2000、Excel 2000使用教程,高长铎
+excel,得心应手学Excel 2007,陈泽友
+excel,Excel基础与应用精品教程:2007版,郭燕主编

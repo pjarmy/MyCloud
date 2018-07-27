@@ -1,0 +1,6 @@
+Plant,Type,Treatment,conc,uptake
+Qn1,Quebec,nonchilled,95,16.0
+Qn1,Quebec,nonchilled,175,30.4
+Qn1,Quebec,nonchilled,250,34.8
+Qn1,Quebec,nonchilled,350,37.2
+Qn1,Quebec,nonchilled,500,35.3
