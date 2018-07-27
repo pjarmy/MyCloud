@@ -107,7 +107,7 @@ co2.head()
 # # 电子表格的读取
 !pip install xlrd
 import pandas as pd
-iris = pd.read_excel('F:/GitRespository/MyCloud/iris.xlsx')
+iris = pd.read_excel('F:/GitRespository/MyCloud/pandas06_iris.xlsx')
 iris.head()
 
 =================================================================
@@ -122,7 +122,7 @@ iris.head()
 # R
 # install.packages('readxl')
 # library(readxl)
-# iris <- read_excel(path='F:/GitRespository/MyCloud/iris.xlsx')
+# iris <- read_excel(path='F:/GitRespository/MyCloud/pandas06_iris.xlsx')
 # head(iris)
 # ==============================================================
 # A tibble: 5 x 5
