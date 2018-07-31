@@ -10,7 +10,7 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 import pandas as pd
-iris = pd.read_csv('F:/GitRespository/MyCloud/dataAnalysis/fromZero/data/pandas06_iris.csv')
+iris = pd.read_csv('F:/GitRespository/MyCloud/dataAnalysis/fromZero/data/pandas_iris.csv')
 iris.head()
 
 ==================================================================
@@ -44,7 +44,7 @@ Name: Name, dtype: object
 =============================
 
 # R
-# iris <- read.csv('F:/GitRespository/MyCloud/dataAnalysis/fromZero/data/pandas06_iris.csv')
+# iris <- read.csv('F:/GitRespository/MyCloud/dataAnalysis/fromZero/data/pandas_iris.csv')
 # head(iris)
 #
 # =============================================================

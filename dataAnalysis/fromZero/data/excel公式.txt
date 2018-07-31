@@ -1,0 +1,3 @@
+pandas_training.xlsx
+=RAND()
+=CHOOSE(RANDBETWEEN(1,4),"very_low","High","Low","Middle")
