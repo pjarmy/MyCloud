@@ -1,0 +1,14 @@
+﻿--参考
+https://blog.csdn.net/yxlshk/article/details/79944535
+
+cd /e/Documents/GitHub/MyCloud/
+ 
+ --查看版本
+git log
+ 
+--恢复版本
+git reset --hard ddb2478
+ 
+--推送到网页
+git push [-f]
+-f 表示强制推送，如果推送失败可以添加参数
