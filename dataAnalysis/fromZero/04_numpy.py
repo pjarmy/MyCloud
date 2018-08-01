@@ -20,7 +20,7 @@ print(arr3)
  [5 6 7 8]
  [3 4 5 6]]
  ========================
- 
+
 
 print(arr1.shape)
 print(arr3.shape)
@@ -98,9 +98,9 @@ print(arr3[np.ix_([0,2],[2,3])])
 [[3 4]
  [5 6]]
 =====================
- 
 
- 
+
+
 # # 数学函数
 
 # 取绝对值
@@ -138,12 +138,6 @@ np.mod
 
 # # 统计函数
 
-<<<<<<< HEAD
-
-
-
-
-=======
 # 最大值
 np.max
 # 浮点型的最大值
@@ -261,14 +255,14 @@ print(r6, '\n')
  [ 0.2115209   1.94260851  5.52500366 -0.24361285  2.02707575]
  [-0.63432368  1.53069749  2.76971136 -0.96633715  0.9835341 ]]
 ============================================================================
- 
+
 # 其他常用分布
 
 import numpy as np
 # 设置随机种子
 np.random.seed(3)
 # 自由度为2的t分布
-r7 = np.random.standard_t(df=3, size=(2,3)) 
+r7 = np.random.standard_t(df=3, size=(2,3))
 print(r7, '\n')
 # 自由度为2和5的f分布
 r8 = np.random.f(dfnum=2, dfden=5, size=(3,5))
@@ -276,7 +270,7 @@ print(r8, '\n')
 # 1到10之间均匀分布，并四舍五入取整
 r9 = np.round(np.random.uniform(size=(3,4), low=1, high=10), 0)
 print(r9, '\n')
- 
+
 ==============================================================
 [[ 1.67789635  1.09808087 -0.37427898]
  [-0.53594414 -1.03724199 -0.38205037]]
@@ -292,14 +286,14 @@ print(r9, '\n')
 
 # # 数据加载
 >>>>>>> 18e85eb0314390a69f64a0c319e14b5f4f403606
- 
+
 # 数据加载
 data1 = np.loadtxt(fname='E:/Documents/testfile/loadtxt.txt', delimiter=',', skiprows=1)
 data2 = np.genfromtxt(fname='E:/Documents/testfile/loadtxt.txt', delimiter=',', skip_header=1, usecols=[0,2])
- 
+
 print(data1, '\n')
 print(data2)
- 
+
 =========================
 [[ 5.  6.  7.  8.]
  [ 9. 10. 11. 12.]
@@ -331,34 +325,3 @@ print(data2)
 # header：指定输出数据首行值
 # footer：指定输出数据的末行值
 # comments：指定注释符，默认“#”
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
