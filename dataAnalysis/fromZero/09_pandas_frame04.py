@@ -198,9 +198,207 @@ merge_data2.drop('id', axis=1).head()
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# 数据集的横向扩展
+# 离散变量的哑变量处理
+# pd.get_dummies()
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+import pandas as pd
+# 数据读取
+user_level = pd.read_csv('F:/GitRespository/MyCloud/dataAnalysis/fromZero/data/pandas_user_level.csv')
+user_level.head()
+
+==========================
+   id gender  age level
+0   1      F   25    V1
+1   2      M   26    V1
+2   3      F   20    V2
+3   4      M   25    V2
+4   5      M   20    V1
+==========================
+
+# 哑变量处理
+user_level_dummy = pd.get_dummies(user_level, columns = ['gender','level']).head()
+
+==========================================================================
+   id  age  gender_F  gender_M  level_V1  level_V2  level_V3  level_V4
+0   1   25         1         0         1         0         0         0
+1   2   26         0         1         1         0         0         0
+2   3   20         1         0         0         1         0         0
+3   4   25         0         1         0         1         0         0
+4   5   20         0         1         1         0         0         0
+==========================================================================
+
+# 建模时要删除原离散变量中的某一个水平，作为参照组
+user_level_dummy = pd.get_dummies(user_level, columns = ['gender','level']).head()
+user_level_dummy.drop(['gender_F','level_V1'], axis = 1).head()
+
+======================================================
+   id  age  gender_M  level_V2  level_V3  level_V4
+0   1   25         0         0         0         0
+1   2   26         1         0         0         0
+2   3   20         0         1         0         0
+3   4   25         1         1         0         0
+4   5   20         1         0         0         0
+======================================================
+
+
+# # R
+# # dummyVars()
+# # install.packages('caret')
+
+# # 数据读取
+# user_level <- read.csv('F:/GitRespository/MyCloud/dataAnalysis/fromZero/data/pandas_user_level.csv')
+# str(user_level)
+
+# # 取出索引因子型变量
+# factor_vars <- names(user_level)[sapply(user_level, class) == 'factor']
+# factor_vars
+
+# =======================
+# [1] "gender" "level"
+# =======================
+
+# # 构建离散变量的公式
+# f <- formula(paste0('~', paste(factor_vars, collapse = '+')))
+# # 使用dummyVars函数创建哑变量
+# dummy <- dummyVars(f, data = user_level)
+# # 哑变量输出
+# head(predict(dummy, user_level))
+
+# ===========================================================
+  # gender.F gender.M level.V1 level.V2 level.V3 level.V4
+# 1        1        0        1        0        0        0
+# 2        0        1        1        0        0        0
+# 3        1        0        0        1        0        0
+# 4        0        1        0        1        0        0
+# 5        0        1        1        0        0        0
+# 6        1        0        1        0        0        0
+# ===========================================================
+
+# str(user_level)
+
+# =============================================================================
+# 'data.frame':	154 obs. of  4 variables:
+ # $ id    : int  1 2 3 4 5 6 7 8 9 10 ...
+ # $ gender: Factor w/ 2 levels "F","M": 1 2 1 2 2 1 1 1 2 2 ...
+ # $ age   : int  25 26 20 25 20 37 34 20 22 35 ...
+ # $ level : Factor w/ 4 levels "V1","V2","V3",..: 1 1 2 2 1 1 4 3 4 2 ...
+ # =============================================================================
+
+# # 通过 cbind() 将 id、age 两个数据集合并起来
+# data <- cbind(subset(user_level, select = -c(gender,level)),
+				# data.frame(predict(dummy, user_level)))
+# head(data)
+
+# ==================================================================
+  # id age gender.F gender.M level.V1 level.V2 level.V3 level.V4
+# 1  1  25        1        0        1        0        0        0
+# 2  2  26        0        1        1        0        0        0
+# 3  3  20        1        0        0        1        0        0
+# 4  4  25        0        1        0        1        0        0
+# 5  5  20        0        1        1        0        0        0
+# 6  6  37        1        0        1        0        0        0
+# ==================================================================
+
+# data <- data[,-c(3,5)]
+# head(data)
+
+# ===============================================
+  # id age gender.M level.V2 level.V3 level.V4
+# 1  1  25        0        0        0        0
+# 2  2  26        1        0        0        0
+# 3  3  20        0        1        0        0
+# 4  4  25        1        1        0        0
+# 5  5  20        1        0        0        0
+# 6  6  37        0        0        0        0
+# ===============================================
+
+
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# 连续变量的分段
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+import numpy as np
+import pandas as pd
+
+# 随机生成一个表示年龄的字段
+age = np.random.randint(low = 12, high = 80, size = 1000)
+age = pd.Series(age)
+age.describe()
+
+======================
+count    1000.000000
+mean       46.627000
+std        19.302654
+min        12.000000
+25%        30.000000
+50%        47.500000
+75%        63.000000
+max        79.000000
+dtype: float64
+======================
+
+
+# 18~45 青年、45~60 中年、60~ 老年
+# 数据切割
+age_cut = pd.cut(age, bins = [0,18,45,60,80], right = False,
+				labels = ['未成年','青年','中年','老年'])
+age_cut.head()
+
+=========================================================
+0    老年
+1    老年
+2    青年
+3    老年
+4    青年
+dtype: category
+Categories (4, object): [未成年 < 青年 < 中年 < 老年]
+=========================================================
+
+# right: False 表示分段的数据区间不包含上限
+
+age.head(5)            # 原始年龄
+
+===============
+0    75
+1    74
+2    18
+3    73
+4    28
+dtype: int32
+===============
+
+
+# # R
+# # 加载第三方包
+# library(Hmisc)
+# # 随机生成年龄数据
+# age <- round(runif(n = 1000, min = 12, max = 80), 0)
+# # 年龄分段
+# age_cut <- cut2(age, cuts = c(18,45,60))
+# head(age_cut)
+
+# ======================================================
+# [1] [12,18) [18,45) [18,45) [60,80] [18,45) [18,45)
+# Levels: [12,18) [18,45) [45,60) [60,80]
+# ======================================================
+
+# # 设置标签
+# cuts <- factor(age_cut, levels = c('[12,18)','[18,45)','[45,60)','[60,80]'),
+				# labels = c('未成年','青年','中年','老年'))
+# head(cuts)
+
+# ======================================================
+# [1] 未成年 青年   青年   老年   青年   青年  
+# Levels: 未成年 青年 中年 老年
+# ======================================================
+
+# head(age)
+
+# ========================
+# [1] 16 30 41 78 24 30
+# ========================
 
 
 
