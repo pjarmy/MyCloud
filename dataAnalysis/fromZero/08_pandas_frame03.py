@@ -1,4 +1,6 @@
 # pandas_DataFrame03
+# E:/Documents/GitHub/MyCloud/dataAnalysis/fromZero/data/
+# F:/GitRespository/MyCloud/dataAnalysis/fromZero/data/
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -40,7 +42,7 @@ Name: gender, dtype: float64
 
 # R
 # library('readxl')
-# income <- read_excel('F:/GitRespository/MyCloud/dataAnalysis/fromZero/data/pandas07_income.xlsx')
+# income <- read_excel('F:/GitRespository/MyCloud/dataAnalysis/fromZero/data/pandas_income.xlsx')
 # head(income)
 #
 # ===================================================================
@@ -430,7 +432,179 @@ dtype: bool
 # 计算每个学生的总成绩，或各科平均分，可以使用 apply()
 
 # 读取数据
-score = pd.read_csv()
+score = pd.read_csv('E:/Documents/GitHub/MyCloud/dataAnalysis/fromZero/data/pandas_training.csv')
+score.head()
+
+=============================================
+    STG   SCG   STR   LPR   PEG       UNS
+0  0.00  0.00  0.00  0.00  0.00  very_low
+1  0.08  0.08  0.10  0.24  0.90      High
+2  0.06  0.06  0.05  0.25  0.33       Low
+3  0.85  0.67  0.60  0.45  0.14  very_low
+4  0.41  0.42  0.23  0.25  0.34    Middle
+=============================================
+ 
+# 每个学生的平均成绩
+score['tot'] = score.iloc[:,0:5].apply(func = np.sum, axis=1)
+
+==================================================
+    STG   SCG   STR   LPR   PEG       UNS   tot
+0  0.00  0.00  0.00  0.00  0.00  very_low  0.00
+1  0.08  0.08  0.10  0.24  0.90      High  1.40
+2  0.06  0.06  0.05  0.25  0.33       Low  0.75
+3  0.85  0.67  0.60  0.45  0.14  very_low  2.71
+4  0.41  0.42  0.23  0.25  0.34    Middle  1.65
+==================================================
+
+# 每门学科的平均分数
+score.iloc[:,0:5].apply(func = np.mean, axis=0)
+
+==================
+STG    0.507889
+SCG    0.481156
+STR    0.509447
+LPR    0.487035
+PEG    0.462211
+dtype: float64
+==================
+
+
+# # # R
+# # # 实现上述映射操作的函数有很多，这里 sapply()和 apply()两个函数
+
+# # 统计每列是否存在缺失
+# sapply(df, function(x) any(is.na(x)))
+
+# ==========================
+   # x1    x2    x3    x4 
+ # TRUE  TRUE FALSE  TRUE
+# ==========================
+
+# # 读取数据
+# score <- read.csv('E:/Documents/GitHub/MyCloud/dataAnalysis/fromZero/data/pandas_training.csv')
+
+# # 每个学生的总成绩
+# score$tot <- apply(as.matrix(score[,1:5]),1,sum)
+
+# head(score, 3)
+
+# =============================================
+   # STG  SCG  STR  LPR  PEG      UNS  tot
+# 1 0.00 0.00 0.00 0.00 0.00 very_low 0.00
+# 2 0.08 0.08 0.10 0.24 0.90     High 1.40
+# 3 0.06 0.06 0.05 0.25 0.33      Low 0.75
+# =============================================
+
+# # 每门科目的平均分数
+# sapply(score[,1:5],mean)
+
+# ====================================================
+      # STG       SCG       STR       LPR       PEG 
+# 0.5078894 0.4811558 0.5094472 0.4870352 0.4622111
+# ====================================================
+
+# 如果需要统计数据集每行的某个值，需要先将数值型的数据框转化为矩阵，然后给予矩阵使用apply()
+
+
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# 数据汇总
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+income = pd.read_excel('E:/Documents/GitHub/MyCloud/dataAnalysis/fromZero/data/pandas_income.xlsx')
+income.head(3)
+
+===============================================================
+   age  edu time gender  zcjz  zcss  week hours income level
+0   39        13   Male  2174     0          40        <=50K
+1   50        13   Male     0     0          13        <=50K
+2   38         9   Male     0     0          40        <=50K
+===============================================================
+
+# 对性别 gender 做分组统计
+groupby_gender = income.groupby(['gender'])
+groupby_gender.aggregate(np.mean)
+
+=============================================================
+              age   edu time       zcjz  zcss  week hours
+gender
+Female  44.102362  19.771654   0.000000   0.0   24.905512
+Male    41.700855  18.752137  18.581197   0.0   25.666667
+=============================================================
+
+# 对性别 gender 和收入水平两个变量做分组统计
+grouped = income.groupby(['gender','income level'])
+grouped.aggregate(np.mean)
+
+=========================================================================
+                           age   edu time       zcjz  zcss  week hours
+gender income level
+Female <=50K         44.597222  19.875000   0.000000   0.0   25.000000
+       >=50K         43.454545  19.636364   0.000000   0.0   24.781818
+Male   <=50K         42.942308  18.423077  41.807692   0.0   26.903846
+       >=50K         40.707692  19.015385   0.000000   0.0   24.676923
+=========================================================================
+
+# 对性别和收入水平两个变量做分组统计，但不同的变量作不同的聚合
+grouped = income.groupby(['gender','income level'])
+# 例如，对年龄算平均值，对教育时长算中位数
+grouped.aggregate({'age':np.mean, 'edu time':np.median})
+
+===========================================
+                           age  edu time
+gender income level
+Female <=50K         44.597222      17.0
+       >=50K         43.454545      18.0
+Male   <=50K         42.942308      14.5
+       >=50K         40.707692      15.0
+===========================================
+
+
+# R
+# head(income,3)
+
+# ======================================================
+# # A tibble: 3 x 7
+    # age `edu time` gender  zcjz  zcss `week hours`
+  # <dbl>      <dbl> <chr>  <dbl> <dbl>        <dbl>
+# 1    39         13 Male    2174     0           40
+# 2    50         13 Male       0     0           13
+# 3    38          9 Male       0     0           40
+# # ... with 1 more variable: `income level` <chr>
+# ======================================================
+
+# # install.packages('dplyr')
+# library(dplyr)
+
+# # 对性别变量分组
+# groupby.gender <- group_by(.data = income, gender)
+
+# # 需要对什么变量汇总，就需要手工书写
+# summarise(groupby.gender, avg.age = mean(age), avg.edu_time = mean(`edu time`))
+
+# ===================================
+# # A tibble: 2 x 3
+  # gender avg.age avg.edu_time
+  # <chr>    <dbl>        <dbl>
+# 1 Female    44.1         19.8
+# 2 Male      41.7         18.8
+# ===================================
+
+# # 对性别和收入水平分组
+# grouped <- group_by(.data = income, gender, `income level`)
+# summarise(grouped, avg.age = mean(age), median.edu_time = median(`edu time`))
+
+# ====================================================
+# # A tibble: 4 x 4
+# # Groups:   gender [?]
+  # gender `income level` avg.age median.edu_time
+  # <chr>  <chr>            <dbl>           <dbl>
+# 1 Female <=50K             44.6            17  
+# 2 Female >=50K             43.5            18  
+# 3 Male   <=50K             42.9            14.5
+# 4 Male   >=50K             40.7            15
+# ====================================================
 
 
 
@@ -447,12 +621,3 @@ score = pd.read_csv()
 
 
 
-
-
-
-
-
-
-
-
-1
