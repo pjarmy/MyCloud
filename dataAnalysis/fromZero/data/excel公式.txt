@@ -1,3 +1,14 @@
 pandas_training.xlsx
+--取0-1的随机数
 =RAND()
+随机显示四个等级
 =CHOOSE(RANDBETWEEN(1,4),"very_low","High","Low","Middle")
+
+**************************************************************************************************
+data1/pandas_test1
+--生成6位随机数
+=CONCATENATE(IF(INT(RAND()*2)=0,CHAR(INT(RAND()*9+48)),IF(INT(RAND()*2)=0,CHAR(INT(RAND()*25+65)),CHAR(INT(RAND()*25+97)))),IF(INT(RAND()*2)=0,CHAR(INT(RAND()*9+48)),IF(INT(RAND()*2)=0,CHAR(INT(RAND()*25+65)),CHAR(INT(RAND()*25+97)))),IF(INT(RAND()*2)=0,CHAR(INT(RAND()*9+48)),IF(INT(RAND()*2)=0,CHAR(INT(RAND()*25+65)),CHAR(INT(RAND()*25+97)))),IF(INT(RAND()*2)=0,CHAR(INT(RAND()*9+48)),IF(INT(RAND()*2)=0,CHAR(INT(RAND()*25+65)),CHAR(INT(RAND()*25+97)))),IF(INT(RAND()*2)=0,CHAR(INT(RAND()*9+48)),IF(INT(RAND()*2)=0,CHAR(INT(RAND()*25+65)),CHAR(INT(RAND()*25+97)))),IF(INT(RAND()*2)=0,CHAR(INT(RAND()*9+48)),IF(INT(RAND()*2)=0,CHAR(INT(RAND()*25+65)),CHAR(INT(RAND()*25+97)))))
+取 c2 的第一个字母
+=MID(C2,1,1)
+
+**************************************************************************************************
