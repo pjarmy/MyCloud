@@ -60,6 +60,8 @@ Municipalities <- c('北京市','上海市','天津市','重庆市')
 # png(file = "F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/Image/Municipalities_GDP.png")
 # Plot the bar chart
 barplot(GDP, names.arg = Municipalities, main = "四个直辖市 GDP 大比拼", ylab = 'GDP', ylim = c(5000,15000), col = 'steelblue')
+
+barplot(GDP, names.arg = Municipalities, main = "四个直辖市 GDP 大比拼", ylab = 'GDP', col = 'steelblue')
 # barplot(GDP, names.arg = Municipalities, main = "Competition of Four Municipalities GDP", xlab = 'Municipalities', ylab = 'GDP', col = 'steelblue')
 dev.off()
 
