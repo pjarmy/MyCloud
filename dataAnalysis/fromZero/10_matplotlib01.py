@@ -123,6 +123,18 @@ plt.show()
 
 
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# 垂直堆叠条形图
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# 导入模块
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+# 导入数据
+data = pd.read_excel()
+
 
 
 
