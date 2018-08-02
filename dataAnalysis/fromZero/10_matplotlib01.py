@@ -1,4 +1,7 @@
-# matplotlib01
+# matplotlib_BarChart01
+# 百度百科
+# 条形图（bar chart） 是用宽度相同的条形的高度或长短来表示数据多少的图形。条形图可以横置或纵置，纵置时也称为柱形图（column chart）。此外，条形图有简单条形图、复式条形 图等形式
+# 区分 直方图 直方图有范围
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # 简单垂直条形图
@@ -34,6 +37,33 @@ for x,y in enumerate(GDP):
     plt.text(x,y+100, '%s' %round(y,1), ha='center')
 # 显示图形
 plt.show()
+
+
+
+# R
+# 条形图表示矩形条中的数据，条的长度与变量的值成比例。 R语言使用函数barplot()创建条形图。 R语言可以在条形图中绘制垂直和水平条。 在条形图中，每个条可以给予不同的颜色。
+************************************************************
+# R语言 创建条形图的基本语法
+barplot(H, xlab, ylab, main, names.arg, col)
+    H           是包含在条形图中使用的数值的向量或矩阵
+    xlab        是 x轴的标签
+    ylab        是 y轴的标签
+    main        是条形图的标题
+    names.arg   是在每个条下出现的名称的向量
+    col         用于向途中的条形提供颜色
+************************************************************
+
+# Create data for the graph.
+GDP <- c(12406.8, 13908.57, 9386.87, 9143.64)
+Municipalities <- c('北京市','上海市','天津市','重庆市')
+# Give the chart file a name. 保存图片
+# png(file = "F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/Image/Municipalities_GDP.png")
+# Plot the bar chart
+barplot(GDP, names.arg = Municipalities, main = "四个直辖市 GDP 大比拼", ylab = 'GDP', ylim = c(5000,15000), col = 'steelblue')
+# barplot(GDP, names.arg = Municipalities, main = "Competition of Four Municipalities GDP", xlab = 'Municipalities', ylab = 'GDP', col = 'steelblue')
+dev.off()
+
+
 
 
 
@@ -145,7 +175,7 @@ plt.bar(np.arange(8), data.loc[1,:][1:],  bottom = data.loc[0,:][1:], color = 'g
 plt.bar(np.arange(8), data.loc[2,:][1:],  bottom = data.loc[0,:][1:]+data.loc[1,:][1:], color = 'm', alpha = 0.8, label = '水运', align = 'center')
 plt.bar(np.arange(8), data.loc[3,:][1:],  bottom = data.loc[0,:][1:]+data.loc[1,:][1:]+data.loc[2,:][1:], color = 'black', alpha = 0.8, label = '民航', align = 'center')
 # 添加轴标签
-plt.xlabel('月份')
+plt.xlabel('月  份')
 plt.ylabel('货物量(万吨)')
 # 添加标题
 plt.title('2017年各月份物流运输量')
@@ -195,4 +225,15 @@ plt.show()
 
 
 
-1
+hist(v, main, xlab, xlim, ylim, breaks, col, border)
+以下是所使用的参数的描述 -
+    v       是保护直方图中使用的数值的向量
+    main    表示图标的标题
+    col     用于设置条的颜色
+    border  用于设置每个条的边框颜色
+    xlab    用于给出 x轴的描述(lab label)
+    ylab    用于指定 y轴的描述
+    xlim    用于指导 x轴上值的范围(lim limit)
+    ylim    用于指定 y轴上值的范围
+    break   用于提及每个条的宽度
+    alpha   指定颜色透明度( install.packages('ggplot2') )
