@@ -1,4 +1,7 @@
-# matplotlib_BarChart01
+# matplotlib_BarChart
+# E:/Documents/GitHub/MyCloud/dataAnalysis/fromZero/data/
+# F:/GitRespository/MyCloud/dataAnalysis/fromZero/data/
+
 # 百度百科
 # 条形图（bar chart） 是用宽度相同的条形的高度或长短来表示数据多少的图形。条形图可以横置或纵置，纵置时也称为柱形图（column chart）。此外，条形图有简单条形图、复式条形 图等形式
 # 区分 直方图 直方图有范围
@@ -51,21 +54,18 @@ barplot(H, xlab, ylab, main, names.arg, col)
     main        是条形图的标题
     names.arg   是在每个条下出现的名称的向量
     col         用于向途中的条形提供颜色
+    xpd         逻辑值，设置柱子是否可以超出区域 TRUE/FALSE
 ************************************************************
 
 # Create data for the graph.
 GDP <- c(12406.8, 13908.57, 9386.87, 9143.64)
 Municipalities <- c('北京市','上海市','天津市','重庆市')
 # Give the chart file a name. 保存图片
-# png(file = "F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/Image/Municipalities_GDP.png")
+png(file = "F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/Image/Municipalities_GDP.png")
 # Plot the bar chart
-barplot(GDP, names.arg = Municipalities, main = "四个直辖市 GDP 大比拼", ylab = 'GDP', ylim = c(-5000,15000), col = 'steelblue')
-
-barplot(GDP, names.arg = Municipalities, main = "四个直辖市 GDP 大比拼", ylab = 'GDP', col = 'steelblue')
+barplot(GDP, names.arg = Municipalities, main = "四个直辖市 GDP 大比拼", ylab = 'GDP', ylim = c(5000,15000), col = 'steelblue', xpd = FALSE)
 # barplot(GDP, names.arg = Municipalities, main = "Competition of Four Municipalities GDP", xlab = 'Municipalities', ylab = 'GDP', col = 'steelblue')
 dev.off()
-
-
 
 
 

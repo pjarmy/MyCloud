@@ -443,7 +443,7 @@ score.head()
 3  0.85  0.67  0.60  0.45  0.14  very_low
 4  0.41  0.42  0.23  0.25  0.34    Middle
 =============================================
- 
+
 # 每个学生的平均成绩
 score['tot'] = score.iloc[:,0:5].apply(func = np.sum, axis=1)
 
@@ -476,7 +476,7 @@ dtype: float64
 # sapply(df, function(x) any(is.na(x)))
 
 # ==========================
-   # x1    x2    x3    x4 
+   # x1    x2    x3    x4
  # TRUE  TRUE FALSE  TRUE
 # ==========================
 
@@ -499,7 +499,7 @@ dtype: float64
 # sapply(score[,1:5],mean)
 
 # ====================================================
-      # STG       SCG       STR       LPR       PEG 
+      # STG       SCG       STR       LPR       PEG
 # 0.5078894 0.4811558 0.5094472 0.4870352 0.4622111
 # ====================================================
 
@@ -600,24 +600,8 @@ Male   <=50K         42.942308      14.5
 # # Groups:   gender [?]
   # gender `income level` avg.age median.edu_time
   # <chr>  <chr>            <dbl>           <dbl>
-# 1 Female <=50K             44.6            17  
-# 2 Female >=50K             43.5            18  
+# 1 Female <=50K             44.6            17
+# 2 Female >=50K             43.5            18
 # 3 Male   <=50K             42.9            14.5
 # 4 Male   >=50K             40.7            15
 # ====================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
