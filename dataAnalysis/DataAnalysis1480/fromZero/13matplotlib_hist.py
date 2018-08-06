@@ -1,6 +1,6 @@
 # matplotlib_hist
-# E:/Documents/GitHub/MyCloud/dataAnalysis/fromZero/data/
-# F:/GitRespository/MyCloud/dataAnalysis/fromZero/data/
+# E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
+# F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 
 
 plt.hist(x, bins=10, range=None, density=False, weights=None, cumulative=False, bottom=None,
