@@ -1,6 +1,6 @@
 # pandas_DataFrame03
-# E:/Documents/GitHub/MyCloud/dataAnalysis/fromZero/data/
-# F:/GitRespository/MyCloud/dataAnalysis/fromZero/data/
+# E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
+# F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #

@@ -1,6 +1,6 @@
 # matplotlib_boxplot
-# E:/Documents/GitHub/MyCloud/dataAnalysis/fromZero/data/
-# F:/GitRespository/MyCloud/dataAnalysis/fromZero/data/
+# E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
+# F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 
 
 # 针对离散变量我们可以使用常见的条形图和饼图完成数据的可视化工作，那么，针对数值型变量，我们也有很多可视化的方法，例如箱线图、直方图、折线图、面积图、散点图等等

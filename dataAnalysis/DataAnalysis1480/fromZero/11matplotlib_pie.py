@@ -1,6 +1,6 @@
 # matplotlib_pie
-# E:/Documents/GitHub/MyCloud/dataAnalysis/fromZero/data/
-# F:/GitRespository/MyCloud/dataAnalysis/fromZero/data/
+# E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
+# F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 
 # pie函数参数解读
 plt.pie(x, explode=None, labels=None, colors=None, autopct=None, pctdistance=0.6,

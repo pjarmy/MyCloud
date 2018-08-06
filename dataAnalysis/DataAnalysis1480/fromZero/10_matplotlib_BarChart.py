@@ -1,6 +1,6 @@
 # matplotlib_BarChart
-# E:/Documents/GitHub/MyCloud/dataAnalysis/fromZero/data/
-# F:/GitRespository/MyCloud/dataAnalysis/fromZero/data/
+# E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
+# F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 
 # 百度百科
 # 条形图（bar chart） 是用宽度相同的条形的高度或长短来表示数据多少的图形。条形图可以横置或纵置，纵置时也称为柱形图（column chart）。此外，条形图有简单条形图、复式条形 图等形式
