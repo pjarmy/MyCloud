@@ -235,6 +235,98 @@ end: Wed Aug  8 10:40:38 2018
 
 # super_player.py
 
+# coding=utf-8
+from time import sleep, ctime
+import threading
+
+def super_player(file,time):
+    for i in range(2):
+        print('Strar playing: %s! %s' %(file, ctime()))
+        sleep(time)
+
+# 播放的文件与播放时长
+list = {'爱情买卖.mp3':3,'阿凡达.mp4':5,'我和你.mp3':4}
+
+threads = []
+files = range(len(list))
+
+# 创建线程
+for file,time in list.items():
+    t = threading.Thread(target=super_player, args=(file, time))
+    threads.append(t)
+
+if __name__ == '__main__':
+    # 启动线程
+    for i in files:
+        threads[i].start()
+    for i in files:
+        threads[i].join()
+
+    # 主线程
+    print('end: %s' %ctime())
+
+
+=========================== RESTART ================================
+Strar playing: 爱情买卖.mp3! Wed Aug  8 10:53:49 2018
+Strar playing: 阿凡达.mp4! Wed Aug  8 10:53:49 2018
+Strar playing: 我和你.mp3! Wed Aug  8 10:53:49 2018
+Strar playing: 爱情买卖.mp3! Wed Aug  8 10:53:52 2018
+Strar playing: 我和你.mp3! Wed Aug  8 10:53:53 2018
+Strar playing: 阿凡达.mp4! Wed Aug  8 10:53:54 2018
+end: Wed Aug  8 10:53:59 2018
+
+
+
+
+
+# 创建自己的多线程
+
+# coding=utf-8
+import threading
+from time improt sleep, ctime
+
+class MyThread(threading.Thread):
+
+    def __init__(self, func, args, name=''):
+        threading.Thread.__init__(self)
+        self.name=name
+        self.func=func
+        self.args=args
+
+    def run(self):
+        apply(self.func, self.args)
+
+def super_player(file, time):
+    for i in range(2):
+        print('Start playing: %s! %s' %(file,ctime()))
+        sleep(time)
+
+list = {'爱情买卖.mp3':3,'阿凡达.mp4':5}
+
+# 创建线程
+threads = []
+files = range(len(list))
+
+for k,v in list.items():
+    t
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
