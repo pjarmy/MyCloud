@@ -94,7 +94,7 @@ def week_of_month(tgtdate):
 
 # df_201709['week_of_month'] = df_201709.date.apply(week_of_month)
 df_201807['week_of_month'] = df_201807.date.apply(week_of_month)
-df_201807['day'] = index+1
+# df_201807['day'] = index+1
 # df_201709.head()
 df_201807.head()
 
