@@ -6,7 +6,11 @@
 # http://archive.ics.uci.edu/ml/datasets/combined+cycle+power+plant
 
 
+
+# # # # # # # # # # # # # # # # # # # # # # # #
 # 线性检验
+# # # # # # # # # # # # # # # # # # # # # # # #
+
 
 # 线性回归模型，首先要保证自变量与因变量之间存在线性关系。
 # 如何判断线性关系型，我们可以通过图形或 Pearson相关系数来识别：
@@ -76,6 +80,511 @@ dtype: float64
 # 所以一般还需要进行检验和变量转换
 
 
+
+# # # # # # # # # # # # # # # # # # # # # # # #
+# 多重共线性检验
+# # # # # # # # # # # # # # # # # # # # # # # #
+
+
+# 如果模型的自变量之间存在严重的多重共线性，会导致的后果：
+
+# 导致 OLS估计量可能无效；
+# 增大 OLS估计量的方差
+# 变量的显著性检验将失去意义；
+# 模型缺乏稳定性；
+
+# 所以多重线性检验就显得非常重要了，关于多重共线性的检验可以使用方差膨胀因子（VIF）来鉴定，
+# 如果 VIF大于10，则说明变量存在多重共线性。
+# 一旦发现变量之间存在多重共线性的话，可以考虑删除变量和重新选择模型（岭回归法）
+
+# 百度百科
+# 方差膨胀因子（Variance Inflation Factor，VIF）：是指解释变量之间存在多重共线性时的方差与不存在
+# 多重共线性时的方差之比。容忍度的倒数，VIF越大，显示共线性越严重。经验判断方法表明：当0<VIF<10，
+# 不存在多重共线性；当10=<VIF<100，存在较强的多重共线性；当VIF>=100，存在严重的多重共线性。
+# 多重共线性，有机会研究。
+
+
+# 将因变量 PE，自变量 AT， V， AP和截距项（值为1的1维数组）以数据框的形式组合起来
+y, X = dmatrices('PE~AT+V+AP', data = ccpp, return_type='dataframe')
+
+# 构造空的数据框
+vif = pd.DataFrame()
+# 定义空数据框的两个列
+vif["VIF Factor"] =[variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
+vif["features"] = X.columns
+vif
+
+===============================
+     VIF Factor   features
+0  39847.945838  Intercept
+1      3.888380         AT
+2      3.482090          V
+3      1.348401         AP
+===============================
+
+# 结果显示，所有自变量的 VIF 均低于 10，说明自变量之间并不存在多重线性的隐患。
+
+
+
+# # # # # # # # # # # # # # # # # # # # # # # #
+# 异常点检测
+# # # # # # # # # # # # # # # # # # # # # # # #
+
+# 在异常点检测之前，我们需要对现有的数据，进行线性回归模型的构造。具体操作如下：
+
+# 构造 PE与 AT、V 和 AP之间的线性模型
+fit = sm.formula.ols('PE~AT+V+AP', data = ccpp).fit()
+fit.summary()
+
+===================================================================================
+<class 'statsmodels.iolib.summary.Summary'>
+"""
+                            OLS Regression Results
+==============================================================================
+Dep. Variable:                     PE   R-squared:                       0.918
+Model:                            OLS   Adj. R-squared:                  0.918
+Method:                 Least Squares   F-statistic:                 3.568e+04
+Date:                Wed, 15 Aug 2018   Prob (F-statistic):               0.00
+Time:                        10:07:40   Log-Likelihood:                -28758.
+No. Observations:                9568   AIC:                         5.752e+04
+Df Residuals:                    9564   BIC:                         5.755e+04
+Df Model:                           3
+Covariance Type:            nonrobust
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept    344.0714      9.977     34.487      0.000     324.515     363.628
+AT            -1.6348      0.013   -123.613      0.000      -1.661      -1.609
+V             -0.3283      0.007    -44.735      0.000      -0.343      -0.314
+AP             0.1582      0.010     16.183      0.000       0.139       0.177
+==============================================================================
+Omnibus:                      542.551   Durbin-Watson:                   2.024
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             1896.378
+Skew:                          -0.198   Prob(JB):                         0.00
+Kurtosis:                       5.145   Cond. No.                     2.03e+05
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 2.03e+05. This might indicate that there are
+strong multicollinearity or other numerical problems.
+"""
+===================================================================================
+
+
+from sklearn.metrics import mean_squared_error
+pred = fit.predict()
+np.sqrt(mean_squared_error(ccpp.PE, pred))
+
+======================
+4.887719834860165
+======================
+
+# 通过上面的建模结果来看，一切显得那么的完美（模型显著性检验通过，偏回归系数的显著性校验通过，
+# R方值也达到了0.9以上）。尽管这样，我们还是需要基于这个模型，完成异常点的检测。
+
+
+# 关于异常点检测方法，一般可以通过高杠杆值点（帽子矩阵）或 DFFITS值、学生化残差、cook距离
+# 和 covratio值来判断。这些值的具体计算脚本如下：
+
+# 离群点检测
+outliers = fit.get_influence()
+
+# 高杠杆指点（帽子矩阵）
+leverage = outliers.hat_matrix_diag
+# DFFITS值
+dffits = outliers.dffits[0]
+# 学生化残差
+resid_stu = outliers.resid_studentized_external
+# cook距离
+cook = outliers.cooks_distance[0]
+# covratio值
+covratio = outliers.cov_ratio
+
+# 将上面的几种异常值检验统计量与原始数据集合并
+contat1 = pd.concat([pd.Series(leverage, name='leverage'), pd.Series(dffits, name='dffits'),
+                    pd.Series(resid_stu, name='resid_stu'), pd.Series(cook, name='cook'),
+                    pd.Series(covratio, name='covratio'),], axis = 1)
+ccpp_outliers = pd.concat([ccpp, contat1], axis = 1)
+ccpp_outliers.head()
+
+===================================================================================================
+      AT      V       AP     RH      PE  leverage    dffits  resid_stu          cook  covratio
+0  14.96  41.76  1024.07  73.17  463.26  0.000549 -0.022075  -0.941799  1.218279e-04  1.000597
+1  25.18  62.96  1020.04  59.08  444.37  0.000487  0.003668   0.166180  3.363110e-06  1.000894
+2   5.11  39.40  1012.16  92.14  488.56  0.000787  0.032756   1.167083  2.682360e-04  1.000636
+3  20.86  57.32  1010.24  76.64  446.48  0.000137 -0.010641  -0.908639  2.830953e-05  1.000210
+4  10.82  37.50  1009.23  96.62  473.90  0.000514  0.001008   0.044471  2.542535e-07  1.000932
+===================================================================================================
+
+
+# 通过参考薛毅老师的《统计建模与R软件》书可知，
+# 当高杠杆值点（或帽子矩阵）大于 2(p+1)/n 时，则认为该样本点可能存在异常（其中 p 为自变量的个数，n为观测的个数）；
+# 当DFFITS统计值大于 2sqrt((p+1)/n)时，则认为该样本点可能存在异常；
+# 当学生化残差的绝对值大于 2，则认为该样本点可能存在异常；
+# 对于 cood距离来说，则没有明确的判断标准，一般来说，值越大则为异常点的可能性就越高；
+# 对于 covratio值来说，如果一个样本的 covratio值离值 1 越远，则认为该样本越可能时异常值。
+#
+# 这里我们就以学生化残差作为评判标准，因为其包含了帽子矩阵和 DFFITS的信息
+
+
+
+# 计算异常值数量的比例
+outliers_ratio = sum(np.where((np.abs(ccpp_outliers.resid_stu)>2),1,0))/ccpp_outliers.shape[0]
+outliers_ratio
+
+======================
+0.03710284280936455
+======================
+
+# 结果显示，确实存在异常值，且异常值的数量占了3.7%。对于异常值的处理，我们可以考虑下面几种方法
+#
+# 当异常比例极低时（5% 以内），可以考虑直接删除；
+# 当异常比例比较高时，可以考虑将异常值衍生为哑变量，即异常值对应到1，非异常值则对应到0；
+# 将单独把异常值提取出来，另行建模；
+#
+#
+# 这里为了简单起见，我们将 3.7% 的异常值做删除处理：
+
+# 删除异常值
+ccpp_outliers = ccpp_outliers.loc[np.abs(ccpp_outliers.resid_stu)<=2,]
+
+
+# 重新建模
+fit2 = sm.formula.ols('PE~AT+V+AP', data = ccpp_outliers).fit()
+fit2.summary()
+
+===================================================================================
+<class 'statsmodels.iolib.summary.Summary'>
+"""
+                            OLS Regression Results
+==============================================================================
+Dep. Variable:                     PE   R-squared:                       0.937
+Model:                            OLS   Adj. R-squared:                  0.937
+Method:                 Least Squares   F-statistic:                 4.550e+04
+Date:                Wed, 15 Aug 2018   Prob (F-statistic):               0.00
+Time:                        13:48:55   Log-Likelihood:                -26434.
+No. Observations:                9213   AIC:                         5.288e+04
+Df Residuals:                    9209   BIC:                         5.291e+04
+Df Model:                           3
+Covariance Type:            nonrobust
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept    349.8258      8.857     39.498      0.000     332.465     367.187
+AT            -1.6719      0.012   -141.063      0.000      -1.695      -1.649
+V             -0.3285      0.006    -50.545      0.000      -0.341      -0.316
+AP             0.1531      0.009     17.647      0.000       0.136       0.170
+==============================================================================
+Omnibus:                      455.104   Durbin-Watson:                   1.992
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              184.929
+Skew:                           0.058   Prob(JB):                     6.97e-41
+Kurtosis:                       2.316   Cond. No.                     2.02e+05
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 2.02e+05. This might indicate that there are
+strong multicollinearity or other numerical problems.
+"""
+===================================================================================
+
+
+pred2 = fit2.predict()
+np.sqrt(mean_squared_error(ccpp_outliers.PE, pred2))
+
+=======================
+4.2644419500649375
+=======================
+
+# 通过对比 fit 和 fit2，将异常值删除后重新建模的话，效果会更理想一点，具体表现为：
+# 信息准则（AIC 和 BIC）均变小，同时RMSE（误差均方根） 也由原来的4.89降低到4.26
+
+
+
+
+# # # # # # # # # # # # # # # # # # # # # # # #
+# 正态性检验
+# # # # # # # # # # # # # # # # # # # # # # # #
+
+# 当模型的残差服从正态性假设时，才能保证模型偏回归系数对于t值和模型的F值时有效的。
+# 故模型建好后，要对模型的残差进行正态性检验。关于正态性检验由两类方法，即定性圆形法
+# （直方图，PP图和 QQ图）和定量的非参数法（Shapiro检验和 K-S检验）
+
+
+# 残差的正态性检验（直方图法）
+resid = fit2.resid
+
+# 中文乱码的处理和坐标轴负号的处理   KaiTi 楷体、FangSong 仿宋、SimSun 宋体、SimHei 黑体
+plt.rcParams['font.sans-serif'] = ['SimHei']
+plt.rcParams['axes.unicode_minus'] = False
+
+plt.hist(resid,         # 绘图数据
+        bins = 100,     # 指定直方图条的个数
+        density = True,  # 设置为频率直方图，normed弃用了
+        color = 'steelblue',    # 指定填充色
+        edgecolor = 'k')        # 指定直方图的边界色
+
+# 设置坐标轴和标题
+plt.title('残差直方图')
+plt.ylabel('密度值')
+
+# 生成正态曲线的数据
+x1 = np.linspace(resid.min(), resid.max(), 1000)
+normal = stats.norm.pdf(x1,resid.mean(), resid.std())
+# mlab.normpdf弃用了   使用 scipy.stats.norm.pdf
+
+# 绘制正态分布曲线
+plt.plot(x1, normal, 'r-', linewidth = 2, label = '正态分布曲线')
+
+# 生产核密度曲线的数据
+kde = mlab.GaussianKDE(resid)
+x2 = np.linspace(resid.min(), resid.max(), 1000)
+
+# 绘制核密度曲线
+plt.plot(x2, kde(x2), 'k-', linewidth = 2, label = '核密度曲线')
+
+# 去除图形顶部边界和右边界的刻度
+plt.tick_params(top=False, right=False)
+
+# 显示图例
+plt.legend(loc='best')
+# loc valid locations are
+#         best
+#         upper right
+#         upper left
+#         lower left
+#         lower right
+#         right
+#         center left
+#         center right
+#         lower center
+#         upper center
+#         center
+
+# 显示图形
+plt.show()
+
+# 从残差的直方图来看，核密度曲线与理论的正态分布曲线的趋势还是比较吻合的，即使残差不服从正态
+# 分布，也额能反映其基本近似于正态分布。
+
+
+
+# 残差的正态性检验（PP图和 QQ图法）
+pp_qq_plot = sm.ProbPlot(resid)
+
+pp_qq_plot.ppplot(line = '45')
+plt.title('P-P图')
+
+pp_qq_plot.qqplot(line = 'q')
+plt.title('Q-Q图')
+
+# 显示图形
+plt.show()
+
+# 从PP图和QQ图来看，有一部分样本点并没有落在参考线上，但绝大多数样本点还是与参考线保持一致的步调。
+
+
+# 残差的正态性检验（非参数法）
+standard_resid = (resid-np.mean(resid))/np.std(resid)
+stats.kstest(standard_resid, 'norm')
+
+===============================================================================
+KstestResult(statistic=0.030784687051176818, pvalue=5.2151288608320515e-08)
+===============================================================================
+
+# 由于shapiro正态性检验对样本量的要求是5000以内；而本次数据集的样本量由9000多，故选择K-S
+# 来完成正态性检验。从K-S检验的P值来看，拒绝了残差服从正态分布的假设，即认为残差并不满足正态
+# 性假设这个潜艇。如果残差不服从正态分布的话，建议对Y变量进行box-cox变换处理。由于fit2模型的
+# 残差并没有特别明显的偏态（偏度为0.058，接近于0），故这里就不对Y变量进行box-cox变换了。如果
+# 需要变换的话，可以以下面的代码为例：
+
+import scipy.stats as stats
+# 找到box-cox变换的lambda系数
+lamd = stats.boxcox_normmax(your_data_frame.y, method = 'mle')
+# 对Y进行变换
+your_data_frame['trans_y'] = stats.boxcox(your_data_frame.y, lamd)
+# 建模
+fit = sm.formula.ols('y~x1+x2+...', data = your_data_frame).fit()
+fit.summary()
+
+# 关于线性回归模型的异常点识别、线性性假设、无多重共线性假设和残差的正态性假设在Python中的
+# 实现就介绍到这里。下一期，我们将针对线性回归模型残差的方差齐性和独立性假设进行讲解。
+
+# 接下来我们再用R语言对上面的内容复现一遍
+
+# # # # # # # # # # # # # # # # # # # # # # # #
+# R语言脚本复现
+# # # # # # # # # # # # # # # # # # # # # # # #
+
+# 加载第三方包
+# install.packages("GGally")
+library(readxl)
+library(GGally)
+
+# 读取数据
+ccpp <- read_excel(path = file.choose())
+summary(ccpp)
+
+=====================================================================================
+       AT              V               AP               RH               PE
+ Min.   : 1.81   Min.   :25.36   Min.   : 992.9   Min.   : 25.56   Min.   :420.3
+ 1st Qu.:13.51   1st Qu.:41.74   1st Qu.:1009.1   1st Qu.: 63.33   1st Qu.:439.8
+ Median :20.34   Median :52.08   Median :1012.9   Median : 74.97   Median :451.6
+ Mean   :19.65   Mean   :54.31   Mean   :1013.3   Mean   : 73.31   Mean   :454.4
+ 3rd Qu.:25.72   3rd Qu.:66.54   3rd Qu.:1017.3   3rd Qu.: 84.83   3rd Qu.:468.4
+ Max.   :37.11   Max.   :81.56   Max.   :1033.3   Max.   :100.16   Max.   :495.8
+=====================================================================================
+
+
+# 绘制各变量直接的散点图与相关系数
+ggpairs(ccpp)
+
+
+# 建模
+fit <- lm(PE ~ AT + V + AP, data = ccpp)
+summary(fit)
+
+=========================================================================
+Call:
+lm(formula = PE ~ AT + V + AP, data = ccpp)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-44.063  -3.440  -0.073   3.319  19.449
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)
+(Intercept) 344.071387   9.976759   34.49   <2e-16 ***
+AT           -1.634777   0.013225 -123.61   <2e-16 ***
+V            -0.328323   0.007339  -44.73   <2e-16 ***
+AP            0.158152   0.009773   16.18   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 4.889 on 9564 degrees of freedom
+Multiple R-squared:  0.918,	Adjusted R-squared:  0.9179
+F-statistic: 3.568e+04 on 3 and 9564 DF,  p-value: < 2.2e-16
+=========================================================================
+
+RMSE = sqrt(mean(fit$residuals**2))
+RMSE
+
+============
+[1] 4.88772
+============
+
+
+# 多重共线性检验
+# install.packages("car")
+library(car)
+vif(fit)
+
+=============================
+      AT        V       AP
+3.888380 3.482090 1.348401
+=============================
+
+
+
+# 异常的检验
+# 高杠杆值点（帽子矩阵）
+leverage <- hatvalues(fit)
+
+# dffits值
+Dffits <- dffits(fit)
+
+# 学生化残差
+resid_stu <- Dffits/sqrt(leverage/(1-leverage))
+
+# cook距离
+cook <- cooks.distance(fit)
+
+# covratio值
+Covratio <- covratio(fit)
+head(Covratio)
+
+# 将上面的几种异常值检验统计量与原始数据集合并
+ccpp_outliers <- cbind(ccpp, data.frame(leverage, Dffits, resid_stu, cook, Covratio))
+head(ccpp_outliers)
+
+================================================================================================
+     AT     V      AP    RH     PE     leverage       Dffits  resid_stu         cook Covratio
+1 14.96 41.76 1024.07 73.17 463.26 0.0005490939 -0.022075005 -0.9417990 1.218279e-04 1.000597
+2 25.18 62.96 1020.04 59.08 444.37 0.0004868418  0.003667571  0.1661800 3.363110e-06 1.000894
+3  5.11 39.40 1012.16 92.14 488.56 0.0007871327  0.032756446  1.1670832 2.682360e-04 1.000636
+4 20.86 57.32 1010.24 76.64 446.48 0.0001371331 -0.010641243 -0.9086391 2.830953e-05 1.000210
+5 10.82 37.50 1009.23 96.62 473.90 0.0005139237  0.001008418  0.0444713 2.542535e-07 1.000932
+6 26.27 59.44 1012.23 58.77 443.67 0.0002427063  0.006290653  0.4037407 9.893944e-06 1.000593
+================================================================================================
+
+# 计算异常值数量的比例
+outliers_ratio = sum(abs(ccpp_outliers$resid_stu)>2)/nrow(ccpp_outliers)
+outliers_ratio
+
+================
+[1] 0.03710284
+================
+
+# 删除异常值
+ccpp_outliers = ccpp_outliers[abs(ccpp_outliers$resid_stu)<=2,]
+
+
+
+# 重新建模
+fit2 = lm(PE ~ AT + V + AP, data = ccpp)
+summary(fit2)
+
+=================================================================
+Call:
+lm(formula = PE ~ AT + V + AP, data = ccpp)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-44.063  -3.440  -0.073   3.319  19.449
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)
+(Intercept) 344.071387   9.976759   34.49   <2e-16 ***
+AT           -1.634777   0.013225 -123.61   <2e-16 ***
+V            -0.328323   0.007339  -44.73   <2e-16 ***
+AP            0.158152   0.009773   16.18   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 4.889 on 9564 degrees of freedom
+Multiple R-squared:  0.918,	Adjusted R-squared:  0.9179
+F-statistic: 3.568e+04 on 3 and 9564 DF,  p-value: < 2.2e-16
+=================================================================
+
+
+# 计算模型的RMSE值
+RMSE2 = sqrt(mean(fit2$residuals**2))
+RMSE2
+
+=============
+[1] 4.88772
+=============
+
+
+# 正态性检验
+# 绘制直方图
+hist(x = fit2$residuals, freq = FALSE,
+    breaks = 100, main = 'x的直方图',
+    ylab = '核密度图', xlab = NULL, col = 'steelblue')
+
+# 添加核密度图
+lines(density(fit2$residuals), col = 'red', lty = 1, lwd = 2)
+
+# 添加正态分布图
+x <- fit2$residuals[order(fit2$residuals)]
+lines(x, dnorm(x, mean(x), sd(x)),
+        col = 'blue', lty = 2, lwd = 2.5)
+
+# 添加图例
+legend('topright', legend = c('核密度曲线','正态分布曲线'),
+        col = c('red','blue'), lty = c(1,2),
+        lwd = c(2,2.5), bty = 'n')
 
 
 

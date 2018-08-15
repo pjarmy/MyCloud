@@ -149,6 +149,7 @@ Warnings:
 
 
 # 重建模型
+# ols: ordinary least squares   最小二乘法
 fit2 = smf.ols('sales~TV+radio', data = Train.drop('newspaper', axis = 1)).fit()
 # 模型信息反馈
 fit2.summary()
