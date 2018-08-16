@@ -1,4 +1,4 @@
-# LinearRegression.py(线性回归)
+# LinearRegression.py(线性回归诊断)
 # E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 # F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 
@@ -411,6 +411,169 @@ fit.summary()
 # 关于线性回归模型的异常点识别、线性性假设、无多重共线性假设和残差的正态性假设在Python中的
 # 实现就介绍到这里。下一期，我们将针对线性回归模型残差的方差齐性和独立性假设进行讲解。
 
+
+
+
+
+
+
+# 关于线性回归模型的另外两个假设前提的验证（即回归模型的残差满足齐性（即方差为某个固定值）
+# 和残差之间互相独立性）。
+
+# # # # # # # # # # # # # # # # # # # # # # # #
+# 残差方差齐性检验
+# # # # # # # # # # # # # # # # # # # # # # # #
+
+# 在线性回归模型中，如果模型表现的非常好的话，那么残差与拟合值之间不应该存在某些明细的关系或趋势。
+# 如果模型的残差确实存在一定的异方差的话，会导致估计出来的偏回归系数不具备有效性，甚至导致模型的预测也不准确。
+# 所有，建模后需要验证残差方差是否具有齐性,检验的方法有两种:
+# 一种时图示法，一种时统计验证法。具体代码如下：
+
+
+# ====== 图示法完成方差齐性的判断 ======
+
+# 标准化残差与预测值之间的散点图
+plt.scatter(fit2.predict(), (fit2.resid-fit2.resid.mean())/fit2.resid.std())
+plt.xlabel('预测值')
+plt.ylabel('标准化残值')
+
+# 添加水平参考线
+plt.axhline(y =0, color = 'r', linewidth = 2)
+plt.show()
+
+# 从图中看，并没有发现明显的规律或趋势（判断标准：如果残差在参考线两次均匀分布，则意味着异方差性较弱；
+# 而如果呈现出明显的不均匀分布，则意味着存在明显的异方差），故可以认为没有显著的异方差性特征。
+
+
+# 除了上面的图示法，我们还可以通过White检验和Breush-Pagan检验来完成顶了化的异方差性检验，具体操作如下：
+
+# ====== 统计法完成方差齐性的判断 ======
+# White's Test
+sm.stats.diagnostic.het_white(fit2.resid, exog = fit2.model.exog)
+# Breusck-Pagan
+sm.stats.diagnostic.het_breuschpagan(fit2.resid, exog_het = fit2.model.exog)
+# `het_breushpagan` is deprecated, use `het_breuschpagan` instead!
+
+===================================
+(231.8632300336841,
+ 6.664951902732149e-45,     # P值
+ 26.399000490991146,
+ 1.7120704306927504e-45)
+
+ (26.58307118758634,
+ 7.199522497313831e-06,     # P值
+ 8.882806882651435,
+ 7.101848974821258e-06)
+ ===================================
+
+# 从检验结果来看，不论时 White检验 还是 Breush-Pagan检验，P值都远远小于0.05这个判别界限，
+# 即拒绝原假设（残差方差为常数的原假设），认为残差并不满足齐性这个假设。如果模型的残差趋势
+# 不服从齐性的化，可以考虑两类方法来解决，一种时模型变换法，另一种时加权最小二乘法。
+
+# 对于模型变换法来说，主要考虑残差与自变量之间的关系，
+# 如果残差与某个自变量x成正比，则原始模型的两边需要同除以sqrt(x)；
+# 如果残差与某个自变量x的平方成正比，则原始模型的两边需要同除以x。
+# 对于加权最小二乘法来说，关键时如何确定权重，根据多方资料的搜索、验证，一般会选择如下三种权重来进行对比测试：
+
+# 残差绝对值的倒数作为权重；
+# 残差平方的倒数作为权重；
+# 用残差的平方对数与X重新拟合建模，并将得到的拟合值取指数，用指数的倒数作为权重。
+
+
+# 首先，我们通过图示法，用来观测自变量和残差之间的关系，来决定是否可以用模型变换来解决异方差问题：
+
+# ===== 残差与x的关系 =====
+plt.subplot(231)
+plt.scatter(ccpp_outliers.AT, (fit2.resid-fit2.resid.mean())/fit2.resid.std())
+plt.xlabel('AT')
+plt.ylabel('标准化残差')
+plt.axhline(color = 'red', linewidth = 2)
+
+plt.subplot(232)
+plt.scatter(ccpp_outliers.V, (fit2.resid-fit2.resid.mean())/fit2.resid.std())
+plt.xlabel('V')
+plt.ylabel('标准化残差')
+plt.axhline(color = 'red', linewidth = 2)
+
+plt.subplot(233)
+plt.scatter(ccpp_outliers.AP, (fit2.resid-fit2.resid.mean())/fit2.resid.std())
+plt.xlabel('AP')
+plt.ylabel('标准化残差')
+plt.axhline(color = 'red', linewidth = 2)
+
+plt.subplot(234)
+plt.scatter(np.power(ccpp_outliers.AT,2), (fit2.resid-fit2.resid.mean())/fit2.resid.std())
+plt.xlabel('AT^2')
+plt.ylabel('标准化残差')
+plt.axhline(color = 'red', linewidth = 2)
+
+plt.subplot(235)
+plt.scatter(np.power(ccpp_outliers.V,2), (fit2.resid-fit2.resid.mean())/fit2.resid.std())
+plt.xlabel('V^2')
+plt.ylabel('标准化残差')
+plt.axhline(color = 'red', linewidth = 2)
+
+plt.subplot(236)
+plt.scatter(np.power(ccpp_outliers.AP,2), (fit2.resid-fit2.resid.mean())/fit2.resid.std())
+plt.xlabel('AP^2')
+plt.ylabel('标准化残差')
+plt.axhline(color = 'red', linewidth = 2)
+
+# 设置子图之间的水平距离和高度间距
+plt.subplots_adjust(hspace=0.3, wspace=0.3)
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # 接下来我们再用R语言对上面的内容复现一遍
 
 # # # # # # # # # # # # # # # # # # # # # # # #
@@ -532,29 +695,29 @@ ccpp_outliers = ccpp_outliers[abs(ccpp_outliers$resid_stu)<=2,]
 
 
 # 重新建模
-fit2 = lm(PE ~ AT + V + AP, data = ccpp)
+fit2 = lm(PE ~ AT + V + AP, data = ccpp_outliers)
 summary(fit2)
 
 =================================================================
 Call:
-lm(formula = PE ~ AT + V + AP, data = ccpp)
+lm(formula = PE ~ AT + V + AP, data = ccpp_outliers)
 
 Residuals:
-    Min      1Q  Median      3Q     Max
--44.063  -3.440  -0.073   3.319  19.449
+     Min       1Q   Median       3Q      Max
+-10.0800  -3.2521  -0.0647   3.1998  10.3041
 
 Coefficients:
               Estimate Std. Error t value Pr(>|t|)
-(Intercept) 344.071387   9.976759   34.49   <2e-16 ***
-AT           -1.634777   0.013225 -123.61   <2e-16 ***
-V            -0.328323   0.007339  -44.73   <2e-16 ***
-AP            0.158152   0.009773   16.18   <2e-16 ***
+(Intercept) 349.825814   8.856741   39.50   <2e-16 ***
+AT           -1.671860   0.011852 -141.06   <2e-16 ***
+V            -0.328487   0.006499  -50.55   <2e-16 ***
+AP            0.153113   0.008676   17.65   <2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-Residual standard error: 4.889 on 9564 degrees of freedom
-Multiple R-squared:  0.918,	Adjusted R-squared:  0.9179
-F-statistic: 3.568e+04 on 3 and 9564 DF,  p-value: < 2.2e-16
+Residual standard error: 4.265 on 9209 degrees of freedom
+Multiple R-squared:  0.9368,	Adjusted R-squared:  0.9368
+F-statistic: 4.55e+04 on 3 and 9209 DF,  p-value: < 2.2e-16
 =================================================================
 
 
@@ -562,12 +725,13 @@ F-statistic: 3.568e+04 on 3 and 9564 DF,  p-value: < 2.2e-16
 RMSE2 = sqrt(mean(fit2$residuals**2))
 RMSE2
 
-=============
-[1] 4.88772
-=============
+==============
+[1] 4.264442
+==============
 
 
 # 正态性检验
+
 # 绘制直方图
 hist(x = fit2$residuals, freq = FALSE,
     breaks = 100, main = 'x的直方图',
@@ -587,17 +751,43 @@ legend('topright', legend = c('核密度曲线','正态分布曲线'),
         lwd = c(2,2.5), bty = 'n')
 
 
+# PP图
+real_dist <- ppoints(fit2$residuals)
+theory_dist <- pnorm(fit2$residuals, mean = mean(fit2$residuals), sd = sd(fit2$residuals))
+
+# 绘图
+plot(sort(theory_dist), real_dist, col = 'steelblue', pch = 20, main = 'PP图',
+    xlab = '理论正态分布累计概率', ylab = '实际累计概率')
+
+# 添加对角线作为参考线
+abline(a = 0, b = 1, col = 'red', lwd = 2)
 
 
+# QQ图
+qqnorm(fit2$residuals, col = 'steelblue', pch = 20, main = 'QQ图',
+        xlab = '理论分位数', ylab = '实际分位数')
+
+# 绘制参考线
+qqline(fit2$residuals, col = 'red', lwd = 2)
 
 
+# Shapiro正态性检验
 
+# shapiro <- shapiro.test(fit2$residuals)
+# shapiro
 
+# K-S正态性检验
+fit2_resi <- fit2$residuals
+ks <- ks.test(jitter(fit2_resi), 'pnorm', mean = mean(fit2_resi), sd = sd(fit2_resi))
+# jitter  不能有重复值，使用jitter做小扰动,参见：http://www.dataguru.cn/forum.php?mod=viewthread&tid=120859
 
+=========================================
+	One-sample Kolmogorov-Smirnov test
 
-
-
-
+data:  jitter(fit2_resi)
+D = 0.030707, p-value = 5.694e-08
+alternative hypothesis: two-sided
+=========================================
 
 
 
