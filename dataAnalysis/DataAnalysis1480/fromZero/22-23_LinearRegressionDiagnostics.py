@@ -32,7 +32,7 @@ import matplotlib.mlab as mlab
 ccpp = pd.read_excel('F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/CCPP.xlsx')
 ccpp.describe()
 
-===========================================================================
+'''===========================================================================
                 AT            V           AP           RH           PE
 count  9568.000000  9568.000000  9568.000000  9568.000000  9568.000000
 mean     19.651231    54.305804  1013.259078    73.308978   454.365009
@@ -42,7 +42,7 @@ min       1.810000    25.360000   992.890000    25.560000   420.260000
 50%      20.345000    52.080000  1012.940000    74.975000   451.550000
 75%      25.720000    66.540000  1017.260000    84.830000   468.430000
 max      37.110000    81.560000  1033.300000   100.160000   495.760000
-===========================================================================
+==========================================================================='''
 
 # AT：温度     V：压力    AP：相对湿度     RH：排气量      PE：发电量
 
@@ -57,14 +57,14 @@ plt.show()
 # 发电量与自变量之间的相关系数
 ccpp.corrwith(ccpp.PE)
 
-==================
+'''==================
 AT   -0.948128
 V    -0.869780
 AP    0.518429
 RH    0.389794
 PE    1.000000
 dtype: float64
-==================
+=================='''
 
 # 从返回结果来看，PE（发电量）与 AT（温度）和 V（压力）之间的相关系数还是蛮高的，
 # 而 PE与 AP（相对湿度）和 RH（排气量）之间的相关系数就明细小很多。
@@ -114,13 +114,13 @@ vif["VIF Factor"] =[variance_inflation_factor(X.values, i) for i in range(X.shap
 vif["features"] = X.columns
 vif
 
-===============================
+'''===============================
      VIF Factor   features
 0  39847.945838  Intercept
 1      3.888380         AT
 2      3.482090          V
 3      1.348401         AP
-===============================
+==============================='''
 
 # 结果显示，所有自变量的 VIF 均低于 10，说明自变量之间并不存在多重线性的隐患。
 
@@ -136,7 +136,7 @@ vif
 fit = sm.formula.ols('PE~AT+V+AP', data = ccpp).fit()
 fit.summary()
 
-===================================================================================
+'''===================================================================================
 <class 'statsmodels.iolib.summary.Summary'>
 """
                             OLS Regression Results
@@ -169,16 +169,16 @@ Warnings:
 [2] The condition number is large, 2.03e+05. This might indicate that there are
 strong multicollinearity or other numerical problems.
 """
-===================================================================================
+==================================================================================='''
 
 
 from sklearn.metrics import mean_squared_error
 pred = fit.predict()
 np.sqrt(mean_squared_error(ccpp.PE, pred))
 
-======================
+'''======================
 4.887719834860165
-======================
+======================'''
 
 # 通过上面的建模结果来看，一切显得那么的完美（模型显著性检验通过，偏回归系数的显著性校验通过，
 # R方值也达到了0.9以上）。尽管这样，我们还是需要基于这个模型，完成异常点的检测。
@@ -208,14 +208,14 @@ contat1 = pd.concat([pd.Series(leverage, name='leverage'), pd.Series(dffits, nam
 ccpp_outliers = pd.concat([ccpp, contat1], axis = 1)
 ccpp_outliers.head()
 
-===================================================================================================
+'''===================================================================================================
       AT      V       AP     RH      PE  leverage    dffits  resid_stu          cook  covratio
 0  14.96  41.76  1024.07  73.17  463.26  0.000549 -0.022075  -0.941799  1.218279e-04  1.000597
 1  25.18  62.96  1020.04  59.08  444.37  0.000487  0.003668   0.166180  3.363110e-06  1.000894
 2   5.11  39.40  1012.16  92.14  488.56  0.000787  0.032756   1.167083  2.682360e-04  1.000636
 3  20.86  57.32  1010.24  76.64  446.48  0.000137 -0.010641  -0.908639  2.830953e-05  1.000210
 4  10.82  37.50  1009.23  96.62  473.90  0.000514  0.001008   0.044471  2.542535e-07  1.000932
-===================================================================================================
+==================================================================================================='''
 
 
 # 通过参考薛毅老师的《统计建模与R软件》书可知，
@@ -233,9 +233,9 @@ ccpp_outliers.head()
 outliers_ratio = sum(np.where((np.abs(ccpp_outliers.resid_stu)>2),1,0))/ccpp_outliers.shape[0]
 outliers_ratio
 
-======================
+'''======================
 0.03710284280936455
-======================
+======================'''
 
 # 结果显示，确实存在异常值，且异常值的数量占了3.7%。对于异常值的处理，我们可以考虑下面几种方法
 #
@@ -254,7 +254,7 @@ ccpp_outliers = ccpp_outliers.loc[np.abs(ccpp_outliers.resid_stu)<=2,]
 fit2 = sm.formula.ols('PE~AT+V+AP', data = ccpp_outliers).fit()
 fit2.summary()
 
-===================================================================================
+'''===================================================================================
 <class 'statsmodels.iolib.summary.Summary'>
 """
                             OLS Regression Results
@@ -287,15 +287,15 @@ Warnings:
 [2] The condition number is large, 2.02e+05. This might indicate that there are
 strong multicollinearity or other numerical problems.
 """
-===================================================================================
+==================================================================================='''
 
 
 pred2 = fit2.predict()
 np.sqrt(mean_squared_error(ccpp_outliers.PE, pred2))
 
-=======================
+'''=======================
 4.2644419500649375
-=======================
+======================='''
 
 # 通过对比 fit 和 fit2，将异常值删除后重新建模的话，效果会更理想一点，具体表现为：
 # 信息准则（AIC 和 BIC）均变小，同时RMSE（误差均方根） 也由原来的4.89降低到4.26
@@ -389,9 +389,9 @@ plt.show()
 standard_resid = (resid-np.mean(resid))/np.std(resid)
 stats.kstest(standard_resid, 'norm')
 
-===============================================================================
+'''===============================================================================
 KstestResult(statistic=0.030784687051176818, pvalue=5.2151288608320515e-08)
-===============================================================================
+==============================================================================='''
 
 # 由于shapiro正态性检验对样本量的要求是5000以内；而本次数据集的样本量由9000多，故选择K-S
 # 来完成正态性检验。从K-S检验的P值来看，拒绝了残差服从正态分布的假设，即认为残差并不满足正态
@@ -454,7 +454,8 @@ sm.stats.diagnostic.het_white(fit2.resid, exog = fit2.model.exog)
 sm.stats.diagnostic.het_breuschpagan(fit2.resid, exog_het = fit2.model.exog)
 # `het_breushpagan` is deprecated, use `het_breuschpagan` instead!
 
-===================================
+
+'''===================================
 (231.8632300336841,
  6.664951902732149e-45,     # P值
  26.399000490991146,
@@ -464,7 +465,8 @@ sm.stats.diagnostic.het_breuschpagan(fit2.resid, exog_het = fit2.model.exog)
  7.199522497313831e-06,     # P值
  8.882806882651435,
  7.101848974821258e-06)
- ===================================
+ ==================================='''
+
 
 # 从检验结果来看，不论时 White检验 还是 Breush-Pagan检验，P值都远远小于0.05这个判别界限，
 # 即拒绝原假设（残差方差为常数的原假设），认为残差并不满足齐性这个假设。如果模型的残差趋势
@@ -524,43 +526,126 @@ plt.subplots_adjust(hspace=0.3, wspace=0.3)
 plt.show()
 
 
+# 从图中结果可知，不管是自变量x本身，还是自变量x的平方，标准化残差都均匀的分布在参考线0腹肌，
+# 并不成比例，故无法使用模型变换法。接下来我们尝试使用加权最小二乘法来解决问题：
+
+# 三种权重
+w1 = 1/np.abs(fit2.resid)
+w2 = 1/fit2.resid**2
+ccpp_outliers['loge2'] = np.log(fit2.resid**2)
+# 第三种权重
+model = sm.formula.ols('loge2~AT+V+AP', data = ccpp_outliers).fit()
+w3 = 1/(np.exp(model.predict()))
+
+# 建模
+fit3 = sm.formula.wls('PE~AT+V+AP', data = ccpp_outliers, weights = w1).fit()
+# 异方差检验
+het3 = sm.stats.diagnostic.het_breuschpagan(fit3.resid, exog_het = fit3.model.exog)
+# AIC
+fit3.aic
+
+fit4 = sm.formula.wls('PE~AT+V+AP', data = ccpp_outliers, weights = w2).fit()
+het4 = sm.stats.diagnostic.het_breuschpagan(fit4.resid, exog_het = fit4.model.exog)
+fit4.aic
+
+fit5 = sm.formula.wls('PE~AT+V+AP', data = ccpp_outliers, weights = w3).fit()
+het5 = sm.stats.diagnostic.het_breuschpagan(fit5.resid, exog_het = fit5.model.exog)
+fit5.aic
+
+# fit2模型
+het2 = sm.stats.diagnostic.het_breuschpagan(fit2.resid, exog_het = fit2.model.exog)
+fit2.aic
+
+
+print('fit2模型异方差检验统计量：%.2f，P值为%.4f：' %(het2[0],het2[1]))
+print('fit3模型异方差检验统计量：%.2f，P值为%.4f：' %(het3[0],het3[1]))
+print('fit4模型异方差检验统计量：%.2f，P值为%.4f：' %(het4[0],het4[1]))
+print('fit5模型异方差检验统计量：%.2f，P值为%.4f：\n' %(het5[0],het5[1]))
+
+print('fit2模型的AIC：%.2f' %fit2.aic)
+print('fit3模型的AIC：%.2f' %fit3.aic)
+print('fit4模型的AIC：%.2f' %fit4.aic)
+print('fit5模型的AIC：%.2f' %fit5.aic)
+
+'''=============================================
+fit2模型异方差检验统计量：26.58，P值为0.0000：
+fit3模型异方差检验统计量：31.28，P值为0.0000：
+fit4模型异方差检验统计量：26.74，P值为0.0000：
+fit5模型异方差检验统计量：38.85，P值为0.0000：
+
+fit2模型的AIC：52876.80
+fit3模型的AIC：46016.14
+fit4模型的AIC：42630.89
+fit5模型的AIC：52857.92
+============================================='''
+
+通过对比发现，尽管我们采用了三种不同的权重，但都没能通过残差方差齐性的显著性检验，但似乎
+fit4模型更加理性，相比于fit2来说，AIC信息更小（当然也可能产出过拟合问题）
 
 
 
+# # # # # # # # # # # # # # # # # # # # # # # #
+# 残差独立性检验
+# # # # # # # # # # # # # # # # # # # # # # # #
 
+# 之所以要求残差是独立的，说白了就是要求因变量y是独立的，因为在模型中只有y和残差项时变量，
+# 而自变量X时已知的。如果再配合上正态分布的假设，那就是独立同分布于正态分布，关于残差的独立性
+# 检验我们可以通过Durbin-Watson统计量来测试。其实，在模型的summary信息中就包含了残差的
+# Durbin-Watson统计量值，如果该值越接近与2，则说明残差时独立的。一般而言，在实际的数据集中，
+# 时间序列的样本之间可能存在相关性，而其他数据集之间基本还是独立的。
 
+fit4.summary()
 
+'''===================================================================================
+<class 'statsmodels.iolib.summary.Summary'>
+"""
+                            WLS Regression Results
+==============================================================================
+Dep. Variable:                     PE   R-squared:                       1.000
+Model:                            WLS   Adj. R-squared:                  1.000
+Method:                 Least Squares   F-statistic:                 7.963e+07
+Date:                Fri, 17 Aug 2018   Prob (F-statistic):               0.00
+Time:                        11:09:34   Log-Likelihood:                -21311.
+No. Observations:                9213   AIC:                         4.263e+04
+Df Residuals:                    9209   BIC:                         4.266e+04
+Df Model:                           3
+Covariance Type:            nonrobust
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept    349.9863      0.256   1368.864      0.000     349.485     350.487
+AT            -1.6723      0.000  -4831.713      0.000      -1.673      -1.672
+V             -0.3283      0.000  -1666.503      0.000      -0.329      -0.328
+AP             0.1530      0.000    621.177      0.000       0.152       0.153
+==============================================================================
+Omnibus:                        0.731   Durbin-Watson:                   2.003
+Prob(Omnibus):                  0.694   Jarque-Bera (JB):             1534.329
+Skew:                           0.022   Prob(JB):                         0.00
+Kurtosis:                       1.001   Cond. No.                     1.24e+06
+==============================================================================
 
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 1.24e+06. This might indicate that there are
+strong multicollinearity or other numerical problems.
+"""
+==================================================================================='''
 
+# 从fit4模型的summary信息可知，Durbin-Waston统计量值几乎为2，故可以认为模型的残差之间是满足
+# 独立性这个假设前提的。到此为止，我们就以fit4模型作为我们最终的确定模型，基于这个模型就可以
+# 对新的数据集做预测。
 
+# 下面对fit4模型产生的预测值和实际值作三点图，如果散点图与预测线特别紧密，则认为模型拟合的非常好
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# 预测值与真实值的散点图
+plt.scatter(fit4.predict(), ccpp_outliers.PE)
+plt.plot([fit4.predict().min(), fit.predict().max()],
+        [ccpp_outliers.PE.min(), ccpp_outliers.PE.max()],
+        'r-', linewidth = 3)
+plt.xlabel(u'预测值')
+plt.ylabel(u'实际值')
+# 显示图形
+plt.show()
 
 
 
@@ -589,15 +674,15 @@ library(GGally)
 ccpp <- read_excel(path = file.choose())
 summary(ccpp)
 
-=====================================================================================
-       AT              V               AP               RH               PE
- Min.   : 1.81   Min.   :25.36   Min.   : 992.9   Min.   : 25.56   Min.   :420.3
- 1st Qu.:13.51   1st Qu.:41.74   1st Qu.:1009.1   1st Qu.: 63.33   1st Qu.:439.8
- Median :20.34   Median :52.08   Median :1012.9   Median : 74.97   Median :451.6
- Mean   :19.65   Mean   :54.31   Mean   :1013.3   Mean   : 73.31   Mean   :454.4
- 3rd Qu.:25.72   3rd Qu.:66.54   3rd Qu.:1017.3   3rd Qu.: 84.83   3rd Qu.:468.4
- Max.   :37.11   Max.   :81.56   Max.   :1033.3   Max.   :100.16   Max.   :495.8
-=====================================================================================
+# =====================================================================================
+#        AT              V               AP               RH               PE
+#  Min.   : 1.81   Min.   :25.36   Min.   : 992.9   Min.   : 25.56   Min.   :420.3
+#  1st Qu.:13.51   1st Qu.:41.74   1st Qu.:1009.1   1st Qu.: 63.33   1st Qu.:439.8
+#  Median :20.34   Median :52.08   Median :1012.9   Median : 74.97   Median :451.6
+#  Mean   :19.65   Mean   :54.31   Mean   :1013.3   Mean   : 73.31   Mean   :454.4
+#  3rd Qu.:25.72   3rd Qu.:66.54   3rd Qu.:1017.3   3rd Qu.: 84.83   3rd Qu.:468.4
+#  Max.   :37.11   Max.   :81.56   Max.   :1033.3   Max.   :100.16   Max.   :495.8
+# =====================================================================================
 
 
 # 绘制各变量直接的散点图与相关系数
@@ -608,34 +693,34 @@ ggpairs(ccpp)
 fit <- lm(PE ~ AT + V + AP, data = ccpp)
 summary(fit)
 
-=========================================================================
-Call:
-lm(formula = PE ~ AT + V + AP, data = ccpp)
-
-Residuals:
-    Min      1Q  Median      3Q     Max
--44.063  -3.440  -0.073   3.319  19.449
-
-Coefficients:
-              Estimate Std. Error t value Pr(>|t|)
-(Intercept) 344.071387   9.976759   34.49   <2e-16 ***
-AT           -1.634777   0.013225 -123.61   <2e-16 ***
-V            -0.328323   0.007339  -44.73   <2e-16 ***
-AP            0.158152   0.009773   16.18   <2e-16 ***
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-Residual standard error: 4.889 on 9564 degrees of freedom
-Multiple R-squared:  0.918,	Adjusted R-squared:  0.9179
-F-statistic: 3.568e+04 on 3 and 9564 DF,  p-value: < 2.2e-16
-=========================================================================
+# =========================================================================
+# Call:
+# lm(formula = PE ~ AT + V + AP, data = ccpp)
+#
+# Residuals:
+#     Min      1Q  Median      3Q     Max
+# -44.063  -3.440  -0.073   3.319  19.449
+#
+# Coefficients:
+#               Estimate Std. Error t value Pr(>|t|)
+# (Intercept) 344.071387   9.976759   34.49   <2e-16 ***
+# AT           -1.634777   0.013225 -123.61   <2e-16 ***
+# V            -0.328323   0.007339  -44.73   <2e-16 ***
+# AP            0.158152   0.009773   16.18   <2e-16 ***
+# ---
+# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#
+# Residual standard error: 4.889 on 9564 degrees of freedom
+# Multiple R-squared:  0.918,	Adjusted R-squared:  0.9179
+# F-statistic: 3.568e+04 on 3 and 9564 DF,  p-value: < 2.2e-16
+# =========================================================================
 
 RMSE = sqrt(mean(fit$residuals**2))
 RMSE
 
-============
-[1] 4.88772
-============
+# ============
+# [1] 4.88772
+# ============
 
 
 # 多重共线性检验
@@ -643,10 +728,10 @@ RMSE
 library(car)
 vif(fit)
 
-=============================
-      AT        V       AP
-3.888380 3.482090 1.348401
-=============================
+# =============================
+#       AT        V       AP
+# 3.888380 3.482090 1.348401
+# =============================
 
 
 
@@ -671,23 +756,23 @@ head(Covratio)
 ccpp_outliers <- cbind(ccpp, data.frame(leverage, Dffits, resid_stu, cook, Covratio))
 head(ccpp_outliers)
 
-================================================================================================
-     AT     V      AP    RH     PE     leverage       Dffits  resid_stu         cook Covratio
-1 14.96 41.76 1024.07 73.17 463.26 0.0005490939 -0.022075005 -0.9417990 1.218279e-04 1.000597
-2 25.18 62.96 1020.04 59.08 444.37 0.0004868418  0.003667571  0.1661800 3.363110e-06 1.000894
-3  5.11 39.40 1012.16 92.14 488.56 0.0007871327  0.032756446  1.1670832 2.682360e-04 1.000636
-4 20.86 57.32 1010.24 76.64 446.48 0.0001371331 -0.010641243 -0.9086391 2.830953e-05 1.000210
-5 10.82 37.50 1009.23 96.62 473.90 0.0005139237  0.001008418  0.0444713 2.542535e-07 1.000932
-6 26.27 59.44 1012.23 58.77 443.67 0.0002427063  0.006290653  0.4037407 9.893944e-06 1.000593
-================================================================================================
+# ================================================================================================
+#      AT     V      AP    RH     PE     leverage       Dffits  resid_stu         cook Covratio
+# 1 14.96 41.76 1024.07 73.17 463.26 0.0005490939 -0.022075005 -0.9417990 1.218279e-04 1.000597
+# 2 25.18 62.96 1020.04 59.08 444.37 0.0004868418  0.003667571  0.1661800 3.363110e-06 1.000894
+# 3  5.11 39.40 1012.16 92.14 488.56 0.0007871327  0.032756446  1.1670832 2.682360e-04 1.000636
+# 4 20.86 57.32 1010.24 76.64 446.48 0.0001371331 -0.010641243 -0.9086391 2.830953e-05 1.000210
+# 5 10.82 37.50 1009.23 96.62 473.90 0.0005139237  0.001008418  0.0444713 2.542535e-07 1.000932
+# 6 26.27 59.44 1012.23 58.77 443.67 0.0002427063  0.006290653  0.4037407 9.893944e-06 1.000593
+# ================================================================================================
 
 # 计算异常值数量的比例
 outliers_ratio = sum(abs(ccpp_outliers$resid_stu)>2)/nrow(ccpp_outliers)
 outliers_ratio
 
-================
-[1] 0.03710284
-================
+# ================
+# [1] 0.03710284
+# ================
 
 # 删除异常值
 ccpp_outliers = ccpp_outliers[abs(ccpp_outliers$resid_stu)<=2,]
@@ -698,36 +783,36 @@ ccpp_outliers = ccpp_outliers[abs(ccpp_outliers$resid_stu)<=2,]
 fit2 = lm(PE ~ AT + V + AP, data = ccpp_outliers)
 summary(fit2)
 
-=================================================================
-Call:
-lm(formula = PE ~ AT + V + AP, data = ccpp_outliers)
-
-Residuals:
-     Min       1Q   Median       3Q      Max
--10.0800  -3.2521  -0.0647   3.1998  10.3041
-
-Coefficients:
-              Estimate Std. Error t value Pr(>|t|)
-(Intercept) 349.825814   8.856741   39.50   <2e-16 ***
-AT           -1.671860   0.011852 -141.06   <2e-16 ***
-V            -0.328487   0.006499  -50.55   <2e-16 ***
-AP            0.153113   0.008676   17.65   <2e-16 ***
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-Residual standard error: 4.265 on 9209 degrees of freedom
-Multiple R-squared:  0.9368,	Adjusted R-squared:  0.9368
-F-statistic: 4.55e+04 on 3 and 9209 DF,  p-value: < 2.2e-16
-=================================================================
+# =================================================================
+# Call:
+# lm(formula = PE ~ AT + V + AP, data = ccpp_outliers)
+#
+# Residuals:
+#      Min       1Q   Median       3Q      Max
+# -10.0800  -3.2521  -0.0647   3.1998  10.3041
+#
+# Coefficients:
+#               Estimate Std. Error t value Pr(>|t|)
+# (Intercept) 349.825814   8.856741   39.50   <2e-16 ***
+# AT           -1.671860   0.011852 -141.06   <2e-16 ***
+# V            -0.328487   0.006499  -50.55   <2e-16 ***
+# AP            0.153113   0.008676   17.65   <2e-16 ***
+# ---
+# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#
+# Residual standard error: 4.265 on 9209 degrees of freedom
+# Multiple R-squared:  0.9368,	Adjusted R-squared:  0.9368
+# F-statistic: 4.55e+04 on 3 and 9209 DF,  p-value: < 2.2e-16
+# =================================================================
 
 
 # 计算模型的RMSE值
 RMSE2 = sqrt(mean(fit2$residuals**2))
 RMSE2
 
-==============
-[1] 4.264442
-==============
+# ==============
+# [1] 4.264442
+# ==============
 
 
 # 正态性检验
@@ -780,25 +865,245 @@ qqline(fit2$residuals, col = 'red', lwd = 2)
 fit2_resi <- fit2$residuals
 ks <- ks.test(jitter(fit2_resi), 'pnorm', mean = mean(fit2_resi), sd = sd(fit2_resi))
 # jitter  不能有重复值，使用jitter做小扰动,参见：http://www.dataguru.cn/forum.php?mod=viewthread&tid=120859
+ks
 
-=========================================
-	One-sample Kolmogorov-Smirnov test
-
-data:  jitter(fit2_resi)
-D = 0.030707, p-value = 5.694e-08
-alternative hypothesis: two-sided
-=========================================
-
-
-
+# =========================================
+# 	One-sample Kolmogorov-Smirnov test
+#
+# data:  jitter(fit2_resi)
+# D = 0.030707, p-value = 5.694e-08
+# alternative hypothesis: two-sided
+# =========================================
 
 
+# 加载第三方包
+# install.packages("lmtest")
+# install.packages("lmtest")
+library(ggplot2)
+library(gridExtra)
+library(lmtest)
+library(nlme)
+
+
+# 异方差性检验
+# ====== 图示法完成方差齐性的判断 ======
+# 标准化误差
+std_err <- scale(fit2$residuals)
+# 绘图
+ggplot(data = NULL, mapping = aes(x = fit2$fitted.values, y = std_err)) +
+    geom_point(color = 'steelblue') +
+    geom_hline(yintercept = 0, color = 'red', size = 1.5) +  # 水平参考线
+    labs(x = '预测值', y = '标准化误差')
+
+# + geom_point(color = 'steelblue') 加号放前面会不生效,放在每句后面
+
+
+# ====== 统计法完成方差齐性的判断 ======
+# Breusch-Pagan
+bptest(fit2)
+
+# ==========================================
+# 	studentized Breusch-Pagan test
+#
+# data:  fit2
+# BP = 26.583, df = 3, p-value = 7.2e-06
+# ==========================================
+
+
+# 自变量与残差的关系
+p1 <- ggplot(data = NULL, mapping = aes(x = ccpp_outliers$AT, y = std_err)) +
+  geom_point(color = 'steelblue') +
+  geom_hline(yintercept = 0, color = 'red', size = 1.5) + # 水平参考线
+  labs(x = 'AT', y = '标准化残差')
+
+p2 <- ggplot(data = NULL, mapping = aes(x = ccpp_outliers$V, y = std_err)) +
+  geom_point(color = 'steelblue') +
+  geom_hline(yintercept = 0, color = 'red', size = 1.5) + # 水平参考线
+  labs(x = 'V', y = '标准化残差')
+
+p3 <- ggplot(data = NULL, mapping = aes(x = ccpp_outliers$AP, y = std_err)) +
+  geom_point(color = 'steelblue') +
+  geom_hline(yintercept = 0, color = 'red', size = 1.5) + # 水平参考线
+  labs(x = 'AP', y = '标准化残差')
+
+p4 <- ggplot(data = NULL, mapping = aes(x = ccpp_outliers$AT**2, y = std_err)) +
+  geom_point(color = 'steelblue') +
+  geom_hline(yintercept = 0, color = 'red', size = 1.5) + # 水平参考线
+  labs(x = 'AT^2', y = '标准化残差')
+
+p5 <- ggplot(data = NULL, mapping = aes(x = ccpp_outliers$V**2, y = std_err)) +
+  geom_point(color = 'steelblue') +
+  geom_hline(yintercept = 0, color = 'red', size = 1.5) + # 水平参考线
+  labs(x = 'V^2', y = '标准化残差')
+
+p6 <- ggplot(data = NULL, mapping = aes(x = ccpp_outliers$AP**2, y = std_err)) +
+  geom_point(color = 'steelblue') +
+  geom_hline(yintercept = 0, color = 'red', size = 1.5) + # 水平参考线
+  labs(x = 'AP^2', y = '标准化残差')
+
+grid.arrange(p1,p2,p3,p4,p5,p6,ncol = 3)
 
 
 
 
+# 三种权重
+w1 = 1/abs(fit2$residuals)
+w2 = 1/fit2$residuals**2
+ccpp_outliers['loge2'] = log(fit2$residuals**2)
+model = lm('loge2~AT+V+AP', data = ccpp_outliers)
+w3 = 1/(exp(model$fitted.values))
+
+# WLS的应用
+fit3 = lm('PE~AT+V+AP', data = ccpp_outliers, weights = w1)
+summary(fit3)
+
+# ===================================================================
+# Call:
+# lm(formula = "PE~AT+V+AP", data = ccpp_outliers, weights = w1)
+#
+# Weighted Residuals:
+#     Min      1Q  Median      3Q     Max
+# -3.1865 -1.7927 -0.2135  1.7928  3.2337
+#
+# Coefficients:
+#               Estimate Std. Error t value Pr(>|t|)
+# (Intercept) 353.341367   3.327478  106.19   <2e-16 ***
+# AT           -1.675571   0.004299 -389.76   <2e-16 ***
+# V            -0.329469   0.002257 -145.96   <2e-16 ***
+# AP            0.149760   0.003252   46.05   <2e-16 ***
+# ---
+# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#
+# Residual standard error: 1.879 on 9209 degrees of freedom
+# Multiple R-squared:  0.9904,	Adjusted R-squared:  0.9904
+# F-statistic: 3.178e+05 on 3 and 9209 DF,  p-value: < 2.2e-16
+# ===================================================================
+
+# 异方差检验
+het3 = bptest(fit3)
+# 模型AIC值
+extractAIC(fit3)
+
+=======================
+[1]     4.00 11630.41
+=======================
+
+fit4 = lm('PE~AT+V+AP', data = ccpp_outliers, weights = w2)
+summary(fit4)
+
+# ===================================================================
+# Call:
+# lm(formula = "PE~AT+V+AP", data = ccpp_outliers, weights = w2)
+#
+# Weighted Residuals:
+#     Min      1Q  Median      3Q     Max
+# -1.2530 -0.9995 -0.9686  1.0005  1.2349
+#
+# Coefficients:
+#               Estimate Std. Error t value Pr(>|t|)
+# (Intercept)  3.500e+02  2.557e-01  1368.9   <2e-16 ***
+# AT          -1.672e+00  3.461e-04 -4831.7   <2e-16 ***
+# V           -3.283e-01  1.970e-04 -1666.5   <2e-16 ***
+# AP           1.530e-01  2.462e-04   621.2   <2e-16 ***
+# ---
+# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#
+# Residual standard error: 1 on 9209 degrees of freedom
+# Multiple R-squared:      1,	Adjusted R-squared:      1
+# F-statistic: 7.963e+07 on 3 and 9209 DF,  p-value: < 2.2e-16
+# ===================================================================
+
+het4 = bptest(fit4)
+extractAIC(fit4)
+
+# =======================
+# [1] 4.000000 4.779312
+# =======================
+
+fit5 = lm('PE~AT+V+AP', data = ccpp_outliers, weights = w3)
+summary(fit5)
+
+# ===================================================================
+# Call:
+# lm(formula = "PE~AT+V+AP", data = ccpp_outliers, weights = w3)
+#
+# Weighted Residuals:
+#     Min      1Q  Median      3Q     Max
+# -4.3483 -1.3178 -0.0204  1.3042  4.1407
+#
+# Coefficients:
+#               Estimate Std. Error t value Pr(>|t|)
+# (Intercept) 359.739655   8.790432   40.92   <2e-16 ***
+# AT           -1.685884   0.011861 -142.14   <2e-16 ***
+# V            -0.327177   0.006544  -50.00   <2e-16 ***
+# AP            0.143529   0.008609   16.67   <2e-16 ***
+# ---
+# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#
+# Residual standard error: 1.742 on 9209 degrees of freedom
+# Multiple R-squared:  0.9378,	Adjusted R-squared:  0.9378
+# F-statistic: 4.632e+04 on 3 and 9209 DF,  p-value: < 2.2e-16
+# ===================================================================
+
+het5 = bptest(fit5)
+extractAIC(fit5)
+
+# =======================
+# [1]     4.00 10231.81
+# =======================
+
+summary(fit2)
+
+# ===================================================================
+# Call:
+# lm(formula = PE ~ AT + V + AP, data = ccpp_outliers)
+#
+# Residuals:
+#      Min       1Q   Median       3Q      Max
+# -10.0800  -3.2521  -0.0647   3.1998  10.3041
+#
+# Coefficients:
+#               Estimate Std. Error t value Pr(>|t|)
+# (Intercept) 349.825814   8.856741   39.50   <2e-16 ***
+# AT           -1.671860   0.011852 -141.06   <2e-16 ***
+# V            -0.328487   0.006499  -50.55   <2e-16 ***
+# AP            0.153113   0.008676   17.65   <2e-16 ***
+# ---
+# Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#
+# Residual standard error: 4.265 on 9209 degrees of freedom
+# Multiple R-squared:  0.9368,	Adjusted R-squared:  0.9368
+# F-statistic: 4.55e+04 on 3 and 9209 DF,  p-value: < 2.2e-16
+# ===================================================================
+
+het2 = bptest(fit2)
+extractAIC(fit2)
+
+========================
+[1]     4.00 26731.44
+========================
+
+print(paste0('模型fit2的AIC：',round(extractAIC(fit2)[2],2)))
+print(paste0('模型fit3的AIC：',round(extractAIC(fit3)[2],2)))
+print(paste0('模型fit4的AIC：',round(extractAIC(fit4)[2],2)))
+print(paste0('模型fit5的AIC：',round(extractAIC(fit5)[2],2)))
+
+# ==================================
+# [1] "模型fit2的AIC：26731.44"
+# [1] "模型fit3的AIC：11630.41"
+# [1] "模型fit4的AIC：4.78"
+# [1] "模型fit5的AIC：10231.81"
+# ==================================
 
 
+
+# 残差独立性检验library(car)
+durbinWatsonTest(fit4)
+
+ggplot(data = NULL, mapping = aes(fit4$fitted.values, ccpp_outliers$PE)) +
+  geom_point() +
+  geom_smooth(method = 'lm') +
+  labs(x = '预测值', y = '实际值')
 
 
 
