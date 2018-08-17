@@ -526,8 +526,13 @@ plt.subplots_adjust(hspace=0.3, wspace=0.3)
 plt.show()
 
 
+<<<<<<< HEAD
 # 从图中结果可知，不管是自变量x本身，还是自变量x的平方，标准化残差都均匀的分布在参考线0腹肌，
 # 并不成比例，故无法使用模型变换法。接下来我们尝试使用加权最小二乘法来解决问题：
+=======
+# 从图中结果可知，不管是自变量x本身，还是自变量x的平方，标准化残差都均匀的分布在参考线0附件，并不成比例，
+# 股无法使用模型变换法。接下来我们尝试使用加权最小二乘法来解决问题。
+>>>>>>> 0a0f04d06f12cb2f2b5366e8c5fa46cae2554ff4
 
 # 三种权重
 w1 = 1/np.abs(fit2.resid)
@@ -537,12 +542,19 @@ ccpp_outliers['loge2'] = np.log(fit2.resid**2)
 model = sm.formula.ols('loge2~AT+V+AP', data = ccpp_outliers).fit()
 w3 = 1/(np.exp(model.predict()))
 
+<<<<<<< HEAD
 # 建模
 fit3 = sm.formula.wls('PE~AT+V+AP', data = ccpp_outliers, weights = w1).fit()
 # 异方差检验
 het3 = sm.stats.diagnostic.het_breuschpagan(fit3.resid, exog_het = fit3.model.exog)
 # AIC
 fit3.aic
+=======
+# 三种权重
+w1 = 1/np.abs(fit2.resid)
+w2 = 1/fit2.resid
+
+>>>>>>> 0a0f04d06f12cb2f2b5366e8c5fa46cae2554ff4
 
 fit4 = sm.formula.wls('PE~AT+V+AP', data = ccpp_outliers, weights = w2).fit()
 het4 = sm.stats.diagnostic.het_breuschpagan(fit4.resid, exog_het = fit4.model.exog)
