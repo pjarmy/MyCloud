@@ -1,4 +1,4 @@
-# LinearRegression.py(线性回归诊断)
+# 24-25Ridge_LASSO Regression.py(岭回归和LASSO回归)
 # E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 # F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 

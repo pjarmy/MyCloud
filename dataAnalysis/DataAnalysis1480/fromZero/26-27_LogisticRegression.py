@@ -1,4 +1,4 @@
-# LinearRegression.py(线性回归诊断)
+# 26-27_LogisticRegression.py(逻辑)
 # E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 # F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 
@@ -392,28 +392,3 @@ ggplot(df, aes(x = x, y = y)) +
     labs(x = '1-specificity', y = 'Sensityvity',
         title = paste0('ROC Curve AUC=', round(ROC$auc, 3))) +
     theme(plot.title = element_text(hjust = 0.5, face = 'bold'))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-1
