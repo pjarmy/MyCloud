@@ -116,6 +116,7 @@ np.exp
 np.log2
 np.log10
 np.log(x,base)
+
 # 符号函数（大于0的数返回1、小于0的数返回-1、0返回0值）
 np.sign
 # 向上取整
