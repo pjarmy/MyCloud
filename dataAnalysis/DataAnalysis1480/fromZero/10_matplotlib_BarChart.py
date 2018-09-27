@@ -11,7 +11,7 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 # 案例一：直辖市GDP水平
-# 北京、上海、天津、重庆  12406.8亿、13908.57亿、
+# 北京、上海、天津、重庆  12406.8亿、13908.57亿、9386.87亿、9143.64亿
 
 # 导入绘图模块
 import matplotlib.pyplot as plt
@@ -144,9 +144,9 @@ plt.ylim([2500,19000])
 
 # 为每个条形图添加数值标签
 for x2016,y2016 in enumerate(Y2016):
-    plt.text(x2016,y2016+100, '%s' %y2016)
+    plt.text(x2016,y2016+100, '%s' %y2016, ha = 'center')
 for x2017,y2017 in enumerate(Y2017):
-    plt.text(x2017+bar_width+0.01,y2017+100, '%s' %y2017)
+    plt.text(x2017+bar_width+0.01,y2017+100, '%s' %y2017, ha = 'center')
 
 # # 显示图例
 # plt.legend()
