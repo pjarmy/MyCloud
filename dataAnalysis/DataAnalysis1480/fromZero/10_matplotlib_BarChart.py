@@ -26,7 +26,7 @@ plt.rcParams['axes.unicode_minus'] = False
 plt.bar(range(4), GDP, align = 'center', color = 'steelblue', alpha = 0.8)
 # align: 标签水平居中、alpha: 透明度、color: 颜色
 # 添加轴标签，y轴
-plt.ylabel('GDP')
+plt.ylabel('GDP(亿)')
 # plt.xlabel('城市')
 # 添加标题
 plt.title('四个直辖市 GDP 大比拼')
