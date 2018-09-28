@@ -29,14 +29,14 @@ plt.scatter(x, y, s=20
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# 设置绘图风格
+# 设置绘图风格（添加网格线）
 plt.style.use('ggplot')
 # 中文乱码的处理和坐标轴负号的处理   KaiTi 楷体、FangSong 仿宋、SimSun 宋体、SimHei 黑体
 plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
 
 # 读入数据
-cars = pd.read_csv('F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/matplotlib_cars.csv')
+cars = pd.read_csv('E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/matplotlib_cars.csv')
 # 绘图
 plt.scatter(cars.speed,         # x轴数据为汽车速度
             cars.dist,       # y轴数据为汽车的刹车距离
@@ -84,7 +84,7 @@ plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
 
 # 读取数据
-iris = pd.read_csv('F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/pandas_iris.csv')
+iris = pd.read_csv('E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/pandas_iris.csv')
 
 # 自定义颜色
 colors = ['steelblue','#9999ff','#ff9999']
@@ -126,7 +126,7 @@ plt.show()
 import numpy as np
 
 # 读取数据
-sales = pd.read_excel('F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/matplotlib_sales.xlsx')
+sales = pd.read_excel('E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/matplotlib_sales.xlsx')
 
 # 绘制气泡图
 plt.scatter(sales.finish_ratio,
@@ -166,7 +166,7 @@ plt.show()
 from sklearn.linear_model import LinearRegression
 
 # 导入数据
-cars = pd.read_csv('F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/matplotlib_cars.csv')
+cars = pd.read_csv('E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/matplotlib_cars.csv')
 # 散点图
 plt.scatter(cars.speed,     # x轴数据为汽车速度
             cars.dist,      # y轴数据为汽车的刹车距离
