@@ -124,6 +124,12 @@ plt.show()
 
 # 导入第三方包
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# 中文乱码的处理和坐标轴负号的处理   KaiTi 楷体、FangSong 仿宋、SimSun 宋体、SimHei 黑体
+plt.rcParams['font.sans-serif'] = ['SimHei']
+plt.rcParams['axes.unicode_minus'] = False
 
 # 读取数据
 sales = pd.read_excel('E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/matplotlib_sales.xlsx')
@@ -136,8 +142,8 @@ plt.scatter(sales.finish_ratio,
             edgecolor = 'black')
 
 # 改变轴刻度的显示方式（百分比形式）
-plt.xticks(np.arange(0,1,0.1), [str(i*100)+'%' for i in np.arange(0,1,0.1)])
-plt.yticks(np.arange(0,1,0.1), [str(i*100)+'%' for i in np.arange(0,1,0.1)])
+plt.xticks(np.arange(0,1,0.1), [str(i)+'%' for i in np.arange(0,100,10)])
+plt.yticks(np.arange(0,1,0.1), [str(i)+'%' for i in np.arange(0,100,10)])
 
 # 设置 x轴和 y轴的数据范围
 plt.xlim(0.2, 0.7)
