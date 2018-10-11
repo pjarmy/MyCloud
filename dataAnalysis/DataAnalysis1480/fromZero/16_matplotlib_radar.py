@@ -1,6 +1,6 @@
 # matplotlib_radar(雷达图)
 # E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
-# F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
+# E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 
 # 雷达图的绘制
 
@@ -122,4 +122,4 @@ radar_chart.add('活动前', [3.2,2.1,3.5,2.8,3])
 radar_chart.add('活动后', [4,4.1,4.5,4,4.1])
 
 # 保存图形
-radar_chart.render_to_file('F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/radar_chart.svg')
+radar_chart.render_to_file('E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/radar_chart.svg')

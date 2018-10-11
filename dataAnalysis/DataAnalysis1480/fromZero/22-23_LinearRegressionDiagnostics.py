@@ -1,6 +1,6 @@
 # LinearRegression.py(线性回归诊断)
 # E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
-# F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
+# E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 
 # 数据来源【高炉煤气联合循环发电（CCPP）数据集】
 # http://archive.ics.uci.edu/ml/datasets/combined+cycle+power+plant
@@ -29,7 +29,7 @@ import matplotlib.mlab as mlab
 
 
 # 数据读取
-ccpp = pd.read_excel('F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/CCPP.xlsx')
+ccpp = pd.read_excel('E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/CCPP.xlsx')
 ccpp.describe()
 
 '''===========================================================================

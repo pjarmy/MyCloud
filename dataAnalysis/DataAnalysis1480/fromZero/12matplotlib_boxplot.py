@@ -1,6 +1,5 @@
 # matplotlib_boxplot
 # E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
-# F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 
 
 # 针对离散变量我们可以使用常见的条形图和饼图完成数据的可视化工作，那么，针对数值型变量，我们也有很多可视化的方法，例如箱线图、直方图、折线图、面积图、散点图等等
@@ -48,7 +47,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # 读取 Titanic 数据集
-titanic = pd.read_csv('F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/matplotlab_titanic_dataset.csv')
+titanic = pd.read_csv('E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/matplotlab_titanic_dataset.csv')
 # 检查年龄是否有缺失
 any(titanic.age.isnull())
 # 不妨删除含有缺失年龄的观察
@@ -74,7 +73,7 @@ plt.boxplot(x = titanic.age,    # 指定绘图数据
 # 设置y轴的范围
 plt.ylim(0,85)
 
-# 去除箱线图的上边框与有边框的刻度标签
+# 去除箱线图的上边框与右边框的刻度标签
 plt.tick_params(top=False, right=False)
 # 显示图形
 plt.show()

@@ -1,6 +1,6 @@
 # 24-25Ridge_LASSO Regression.py(岭回归和LASSO回归)
 # E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
-# F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
+# E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 
 # http://f.dataguru.cn/thread-598486-1-1.html
 
@@ -30,7 +30,7 @@ from sklearn.linear_model import Lasso, LassoCV
 from sklearn.metrics import mean_squared_error
 
 # 读取数据
-df = pd.read_csv('F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/Hitters.csv')
+df = pd.read_csv('E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/Hitters.csv')
 # 哑变量处理（处理离散变量）
 dummies = pd.get_dummies(df[['League','Division','NewLeague']])
 # 将原始数据集与哑变量数据合并起来

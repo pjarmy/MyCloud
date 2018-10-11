@@ -1,6 +1,6 @@
 # matplotlib_hist
 # E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
-# F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
+# E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 
 
 plt.hist(x, bins=10, range=None, density=False, weights=None, cumulative=False, bottom=None,
@@ -38,7 +38,7 @@ plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
 
 # 读取Titanic数据集
-titanic = pd.read_csv('F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/matplotlab_titanic_dataset.csv')
+titanic = pd.read_csv('E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/matplotlab_titanic_dataset.csv')
 # 检查年龄是否有缺失any(titanic.age.isnull())
 # 不妨删除含有缺失年龄的观测
 titanic.dropna(subset=['age'], inplace=True)

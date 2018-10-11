@@ -1,6 +1,6 @@
 # LinearRegression.py(线性回归)
 # E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
-# F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
+# E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 
 
 # 从有监督、无监督和半监督的角度来看，回归其实是有监督的算法模型之一
@@ -66,7 +66,7 @@ from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
 
 # 读取外部数据
-sales = pd.read_csv('F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/Advertising.csv')
+sales = pd.read_csv('E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/Advertising.csv')
 # 查看数据的前5行
 sales.head()
 # 数据集中各变量的描述性统计分析
@@ -266,7 +266,7 @@ plt.show()
 # ***************************************
 
 # 读取数据
-sales <- read.csv('F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/Advertising.csv')
+sales <- read.csv('E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/Advertising.csv')
 # 数据的描述性统计
 summary(sales)
 

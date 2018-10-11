@@ -1,6 +1,6 @@
 # 28-29_Kcluster.py(K均值聚类)
 # E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
-# F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
+# E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 
 #     聚类是一种无监督的挖掘算法，其目的就是将N个样本安装特定的划分为K个簇（K<N），而这个
 # 簇所表现的特征是：簇内样本相似度高（方差小），而簇间的相似度低（方差大）。关于聚类算法有
@@ -148,8 +148,8 @@ players_fillna = players.fillna(u'自由球员')
 # !pip install openpyxl
 # pandas保存为 excel、csv： https://blog.csdn.net/yanqianglifei/article/details/77738476
 # pandas to_csv最左边 多一列 的问题： https://blog.csdn.net/guotong1988/article/details/80513879
-players_fillna.to_excel('F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/players.xlsx', index=False)
-players_fillna.to_csv('F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/players1.csv', index=False)
+players_fillna.to_excel('E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/players.xlsx', index=False)
+players_fillna.to_csv('E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/players1.csv', index=False)
 # python导出的csv不可用，需要excel或者csv重新保存一下
 
 
@@ -169,7 +169,7 @@ columns = c('排名','球员','球队','得分','命中-出手','命中率','命
         '命中-罚球','罚球命中率','场次','上场时间')
 # 需要把 players.csv 或 players.xlsx 另存为 csv文件，再保存一下
 players = read.csv(file = file.choose())
-# players = read_excel(path = 'F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/players.xlsx')
+# players = read_excel(path = 'E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/players.xlsx')
 head(players)
 
 # 绘制罚球命中率和命中率散点图

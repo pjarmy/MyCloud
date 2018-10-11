@@ -1,6 +1,6 @@
 # 26-27_LogisticRegression.py(逻辑)
 # E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
-# F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
+# E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 
 #     Logistic模型主要是用来解决二元分类问题，通过构建分类器，计算每一个样本为目标分类的概率，
 # 一般而言，我们会将概率值0.5作为分类的阈值，即概率P大于等于0.5时判别为目标分类，否则为另一种
@@ -52,7 +52,7 @@ c:\users\pjarmy\appdata\local\programs\python\python37\lib\site-packages\ggplot\
 
 
 # 读取数据集
-purchase = pd.read_csv('F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/Social_Network_Ads.csv')
+purchase = pd.read_csv('E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/Social_Network_Ads.csv')
 # 查看数据类型
 purchase.dtypes
 # 查看各变量的缺失情况

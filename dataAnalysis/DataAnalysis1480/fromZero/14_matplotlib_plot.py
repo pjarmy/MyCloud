@@ -1,6 +1,6 @@
 # matplotlib_plot
 # E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
-# F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
+# E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 
 # 折线图：一般用来表示某个数值量随时间的推移而形成的趋势。如：经济走势、销售波动图、PV监控图等。
 # 调用 plot()可以实现折线图的绘制。
@@ -38,7 +38,7 @@ plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
 
 # 读取需要绘图的数据
-article_reading = pd.read_excel('F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/matplotlib_wechart.xlsx')
+article_reading = pd.read_excel('E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/matplotlib_wechart.xlsx')
 # 取出 8月份至 9月28日的数据
 sub_data = article_reading.loc[article_reading.date >= '2017-08-01', :]
 

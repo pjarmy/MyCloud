@@ -1,6 +1,6 @@
 # pandas_DataFrame02
 # E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
-# F:/GitRespository/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
+# E:/Documents/GitHub/MyCloud/dataAnalysis/DataAnalysis1480/fromZero/data/
 
 # 借助 pandas模块进行数据的预处理
 # 内容包括数据集变量与观测的筛选、变量的重命名、数据类型的变换、排序、重复观测的删除、和数据集的抽样
