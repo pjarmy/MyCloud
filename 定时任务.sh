@@ -226,6 +226,39 @@ for i in wpt yjtb
 
 
 
+--mysql检查从库延迟
+pj_check @cgprd2 SLAVE -> pwd
+/mysql/pj_check
+pj_check @cgprd2 SLAVE -> cat check_mysql.sh 
+#!/bin/bash
+source ~/.bash_profile
+
+SLAVE_USER=root
+
+pass='K4RpZ49a8Tc0Cg=='
+SLAVE_PWD=`echo $pass|base64 -d`
+
+SQLCMD="show slave status"
+
+IO_STATUS=`mysql -u${SLAVE_USER} -p${SLAVE_PWD} -e "${SQLCMD}\G;" | awk '$1=="Slave_IO_Running:" {print $2}'`
+SQL_STATUS=`mysql -u${SLAVE_USER} -p${SLAVE_PWD} -e "${SQLCMD}\G;" | awk '$1=="Slave_SQL_Running:" {print $2}'`
+
+if [[ "${IO_STATUS}" != "Yes" || "${SQL_STATUS}" != "Yes" ]]; then
+    ret='10.0.1.101 servers: caigou The MySQL Replication is not synchronous at: '`date +%F" "%H-%M-%S`'  MUST CALL DBA TO RESOLVE!!!!!'
+    echo `date +%Y%m%d%H%M`' ' $ret >> /mysql/pj_check/pj_check.log
+    ssh oracle@10.0.1.123 /bmc/msend/sqlplus_bmc.sh "'$ret'" < /dev/null
+    exit 1
+else
+    echo `date +%Y%m%d%H%M`" !!!Normal!!!" >> /mysql/pj_check/pj_check.log
+fi
+pj_check @cgprd2 SLAVE -> 
+
+
+
+
+
+
+
 
 
 
