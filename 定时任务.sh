@@ -296,7 +296,64 @@ done
 
 
 
+--shareplex多端口巡检
+get_check_result(){
+        sp_ctrl  <<! | grep -e Backlog -e Name -e Import -e Post >/home/oracle/pj_shareplex/check.txt
+port $1
+show
+qstatus
+show sync
+!
+}
 
+send_alerts(){
+
+        status=''
+        time=0
+
+        cat /home/oracle/pj_shareplex/check.txt | while read line
+        do
+        list_01=`echo $line|awk '{print $1}'`
+        if [ $list_01 == 'Import' -o $list_01 == 'Post' ];then
+                status=`echo $line|awk '{print $4}'`
+                queue=`echo $line|awk '{print $2}'`
+                #echo 'queue: '$queue', status: '$status
+        elif [ $list_01 == 'Name:' ];then
+                name=`echo $line|awk '{print $2}'`
+        elif [ $list_01 == 'Backlog' ];then
+                time=`echo $line|awk '{print int($5)}'`
+        fi
+
+        #echo $name
+        #echo $status
+        #echo $queue
+        #echo $time
+        if [ ! $status ];then
+                :;
+        elif [ $status != 'Running' ];then
+                ret='10.1.19.161 port: '$1' queue: '$queue' STATUS: '$status' MUST CALL DBA TO RESOLVE!!!!!'
+                        echo $ret
+                        ssh 10.1.83.156 /bmc/msend/sqlplus_bmc.sh "'$ret'" < /dev/null
+                        status=''
+        elif [ ! $time ];then
+                :;
+        elif [ $time -ge 60 ];then
+                        ret='10.1.19.161 port:'$1' queue: '$name' TIMEOUT: '$time' MUST CALL DBA TO RESOLVE!!!!!'
+                echo $ret
+                ssh 10.1.83.156 /bmc/msend/sqlplus_bmc.sh "'$ret'" < /dev/null
+                time=0
+        fi
+        done
+
+}
+
+
+for port in 2300 5100;
+do
+echo $port
+get_check_result $port
+send_alerts $port
+done
 
 
 
